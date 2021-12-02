@@ -1,0 +1,42 @@
+	/*
+  	Flaticon icon font: Flaticon
+  	Creation date: 12/10/2020 17:15
+  	*/
+
+@font-face {
+  font-family: "Flaticon";
+  src: url("https://themepure.net/template/roxce/roxce/assets/fonts/");
+  src: url("https://themepure.net/template/roxce/roxce/assets/fonts/?") format("embedded-opentype"),
+       url("../fonts/Flaticon.woff2") format("woff2"),
+       url("../fonts/Flaticon.woff") format("woff"),
+       url("../fonts/Flaticon.ttf") format("truetype"),
+       url("../fonts/Flaticon.svg") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("../fonts/Flaticon.svg") format("svg");
+  }
+}
+
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+  font-family: Flaticon;
+  font-style: normal;
+}
+
+.flaticon-life:before { content: "\f100"; }
+.flaticon-steering-wheel:before { content: "\f101"; }
+.flaticon-bars:before { content: "\f102"; }
+.flaticon-paint-1:before { content: "\f103"; }
+.flaticon-paint-palette-and-brush:before { content: "\f104"; }
+.flaticon-varnish:before { content: "\f105"; }
+.flaticon-paint-2:before { content: "\f106"; }
+.flaticon-paint-3:before { content: "\f107"; }
+.flaticon-art:before { content: "\f108"; }
+.flaticon-quote:before { content: "\f109"; }
+.flaticon-painting-bucket:before { content: "\f10a"; }
+.flaticon-sketch:before { content: "\f10b"; }
