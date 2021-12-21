@@ -310,28 +310,28 @@ class App
     public function createUser($fullname, $email, $phone, $password_hash)
     {
         global $dbh;
-        $db_handle = $dbh->prepare("INSERT INTO pv_students SET fullname=:fullname, email=:email, password=:password, phone=:phone, date=NOW()");
+        $db_handle = $dbh->prepare("INSERT INTO pt_students SET fullname=:fullname, email=:email, password=:password, phone=:phone, date=NOW()");
         return $db_handle->execute(array(':fullname'=>$fullname, ':email'=>$email, ':password'=>$password_hash, ':phone'=>$phone))?true:false;
     }
 
     public function updateProfileAdmin($fname, $qstr)
     {
         global $dbh;
-        $db_handle = $dbh->prepare("UPDATE pv_admin SET fname=:fname".$qstr);
+        $db_handle = $dbh->prepare("UPDATE pt_admin SET fname=:fname".$qstr);
         return $db_handle->execute(array(':fname'=>$fname))?true:false;
     }
 
     public function updateProfileGuardian($fullname, $phone, $qstr)
     {
         global $dbh;
-        $db_handle = $dbh->prepare("UPDATE pv_students SET pr_fullname=:fullname, pr_phone=:phone".$qstr);
+        $db_handle = $dbh->prepare("UPDATE pt_students SET pr_fullname=:fullname, pr_phone=:phone".$qstr);
         return $db_handle->execute(array(':fullname'=>$fullname, ':phone'=>$phone))?true:false;
     }
 
     public function updateProfileUser($fname, $qstr)
     {
         global $dbh;
-        $db_handle = $dbh->prepare("UPDATE pv_students SET fname=:fname".$qstr);
+        $db_handle = $dbh->prepare("UPDATE pt_students SET fname=:fname".$qstr);
         return $db_handle->execute(array(':fname'=>$fname))?true:false;
     }
 
@@ -392,7 +392,7 @@ class App
 
       $id = $this->formatUnique($this->generate_unique_id(), 6);
 
-      $db_handle = $dbh->prepare("SELECT * FROM pv_students WHERE reg_no=:id");
+      $db_handle = $dbh->prepare("SELECT * FROM pt_students WHERE reg_no=:id");
       $db_handle->execute(array("id"=>$id));
       return ($db_handle->rowCount()>0)?$this->createUniqueId():$id;
     }
@@ -475,7 +475,7 @@ class App
     public function getUserById($userId)
     {
         global $dbh;
-        $db_handle = $dbh->prepare("SELECT * FROM pv_students WHERE id=:id");
+        $db_handle = $dbh->prepare("SELECT * FROM pt_students WHERE id=:id");
         $db_handle->execute(array(':id'=>$userId));
         return $db_handle->fetch(PDO::FETCH_OBJ);
     }
@@ -483,7 +483,7 @@ class App
     public function getAdminById($userId)
     {
         global $dbh;
-        $db_handle = $dbh->prepare("SELECT * FROM pv_admin WHERE id=:id");
+        $db_handle = $dbh->prepare("SELECT * FROM pt_admin WHERE id=:id");
         $db_handle->execute(array(':id'=>$userId));
         return $db_handle->fetch(PDO::FETCH_OBJ);
     }
@@ -491,7 +491,7 @@ class App
     public function getUserByEmail($email)
     {
         global $dbh;
-        $db_handle = $dbh->prepare("SELECT * FROM pv_students WHERE email=:email");
+        $db_handle = $dbh->prepare("SELECT * FROM pt_students WHERE email=:email");
         $db_handle->execute(array(':email'=>$email));
         return $db_handle->fetch(PDO::FETCH_OBJ);
     }
@@ -499,7 +499,7 @@ class App
     public function getUserByUniqueID($uniqeID)
     {
         global $dbh;
-        $db_handle = $dbh->prepare("SELECT * FROM pv_students WHERE reg_no=:reg_no");
+        $db_handle = $dbh->prepare("SELECT * FROM pt_students WHERE reg_no=:reg_no");
         $db_handle->execute(array(':reg_no'=>$uniqeID));
         return $db_handle->fetch(PDO::FETCH_OBJ);
     }
@@ -514,14 +514,14 @@ class App
 
     public function updateUserGrade($count, $id){
         global $dbh;
-        $db_handle = $dbh->prepare("UPDATE pv_students SET exam_status='1', exam_score='{$count}' WHERE id='{$id}'");
+        $db_handle = $dbh->prepare("UPDATE pt_students SET exam_status='1', exam_score='{$count}' WHERE id='{$id}'");
         $db_handle->execute();
     }
 
     public function getAdminByEmail($email)
     {
         global $dbh;
-        $db_handle = $dbh->prepare("SELECT * FROM pv_admin WHERE email=:email");
+        $db_handle = $dbh->prepare("SELECT * FROM pt_admin WHERE email=:email");
         $db_handle->execute(array(':email'=>$email));
         return $db_handle->fetch(PDO::FETCH_OBJ);
     }

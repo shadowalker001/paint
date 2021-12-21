@@ -4,11 +4,11 @@
             <div class="col-sm-6">
                 <script>
                     document.write(new Date().getFullYear())
-                </script> © Project Verification System.
+                </script> © <?=$app->app_title?>.
             </div>
             <div class="col-sm-6">
                 <div class="text-sm-end d-none d-sm-block">
-                    Crafted with <i class="fas fa-heart text-danger"></i> by <a href="javascript:;" target="_blank" class="text-reset">Shadowalker</a>
+                    Crafted with <i class="fas fa-heart text-danger"></i> by <a target="_blank" href="https://nestuge.com" target="_blank" class="text-reset">Nestuge</a>
                 </div>
             </div>
         </div>

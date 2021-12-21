@@ -18,7 +18,7 @@ if (!isset($_SESSION['tappAdminId'])) {
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="../../assets/images/favicon.ico">
+    <link rel="shortcut icon" href="../../assets/images/favicon.png">
     <link href="../../assets/libs/admin-resources/rwd-table/rwd-table.min.css" rel="stylesheet" type="text/css">
 
     <!-- Bootstrap Css -->
@@ -70,7 +70,7 @@ if (!isset($_SESSION['tappAdminId'])) {
 
                                 <div class="page-title-right">
                                     <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Project Verification System</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);"><?= $app->app_title ?></a></li>
                                         <li class="breadcrumb-item active">View Contact Us</li>
                                     </ol>
                                 </div>
@@ -83,7 +83,7 @@ if (!isset($_SESSION['tappAdminId'])) {
                         <div class="col-sm-12">
                             <div class="card mt-5">
                                 <?php
-                                $querySQL = "SELECT * FROM pv_contact";
+                                $querySQL = "SELECT * FROM pt_contact ORDER BY id DESC";
                                 $db_handle = $dbh->prepare($querySQL);
                                 $db_handle->execute();
                                 $counter = 1;
@@ -98,7 +98,6 @@ if (!isset($_SESSION['tappAdminId'])) {
                                                         <th>ID</th>
                                                         <th>Name</th>
                                                         <th>Email</th>
-                                                        <th>Subject</th>
                                                         <th>Message</th>
                                                         <th>Date</th>
                                                     </tr>
@@ -112,7 +111,6 @@ if (!isset($_SESSION['tappAdminId'])) {
                                                         <td><?=$counter?></td>
                                                         <td><?php echo $paramGetFields->name; ?></td>
                                                         <td><?php echo $paramGetFields->email; ?></td>
-                                                        <td><?php echo $paramGetFields->subject; ?></td>
                                                         <td><?php echo $paramGetFields->message; ?></td>
                                                         <td><?php echo $paramGetFields->date; ?></td>
                                                     </tr>

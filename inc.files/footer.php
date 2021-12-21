@@ -134,7 +134,11 @@
                         </div>
                         <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6">
                             <div class="footer__copyright text-sm-end">
-                                <p>© 2021 <?= $app->app_title ?> All Rights Reserved</p>
+                                <!-- <p>© 2021 <?= $app->app_title ?> All Rights Reserved</p> -->
+                        <p>©
+                            <script>document.write(new Date().getFullYear())</script> <?=$app->app_title?>. Crafted with <i
+                                class="fas fa-heart text-danger"></i> by <a target="_blank"  href="https://nestuge.com">Nestuge</a>
+                        </p>
                             </div>
                         </div>
                     </div>

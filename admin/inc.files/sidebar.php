@@ -41,25 +41,25 @@
                 </li>
 
                 <li>
-                    <a href="add_project">
+                    <a href="add_product">
                         <i class="fas fa-book-medical"></i>
-                        <span>Add Project</span>
+                        <span>Add Product</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="manage_projects">
+                    <a href="manage_products">
                         <i class="fas fa-address-card"></i>
-                        <span>Manage Projects</span>
+                        <span>Manage Products</span>
                     </a>
                 </li>
 
-                <li>
+                <!-- <li>
                     <a href="manage_students">
                         <i class="fas fa-users"></i>
                         <span>Manage Students</span>
                     </a>
-                </li>
+                </li> -->
 
                 <li>
                     <a href="my_profile">

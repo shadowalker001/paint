@@ -29,6 +29,8 @@ $app = new App();
    <link rel="stylesheet" href="static/css/flaticon.css">
    <link rel="stylesheet" href="static/css/default.css">
    <link rel="stylesheet" href="static/css/style.css">
+   <link rel="stylesheet" href="vendors/sweetalert2/sweetalert2.min.css">
+   <link rel="stylesheet" href="vendors/toaster/toastr.min.css">
 </head>
 
 <body>
@@ -184,7 +186,10 @@ $app = new App();
    <script src="static/js/wow.min.js"></script>
    <script src="static/js/isotope.pkgd.min.js"></script>
    <script src="static/js/imagesloaded.pkgd.min.js"></script>
+    <script src="vendors/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="vendors/toaster/toastr.min.js"></script>
    <script src="static/js/main.js"></script>
+    <script src="static/js/functions.js?<?=time()?>"></script>
    <script>
       $(document).ready(function() {
          $('#home').appear(function() {

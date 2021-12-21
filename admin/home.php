@@ -14,7 +14,7 @@ $app = new App();
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="../assets/images/favicon.ico">
+    <link rel="shortcut icon" href="../assets/images/favicon.png">
 
     <!-- Bootstrap Css -->
     <link href="../assets/css/bootstrap.min.css" id="abootstrap-style" rel="stylesheet" type="text/css" />
@@ -82,8 +82,8 @@ $app = new App();
                     </div>
                     <div class="mt-5 text-center">
                         <p>©
-                            <script>document.write(new Date().getFullYear())</script> Project Verification System. Crafted with <i
-                                class="fas fa-heart text-danger"></i> by Shadowalker
+                            <script>document.write(new Date().getFullYear())</script> <?=$app->app_title?>. Crafted with <i
+                                class="fas fa-heart text-danger"></i> by <a href="https://nestuge.com">Nestuge</a>
                         </p>
                     </div>
 

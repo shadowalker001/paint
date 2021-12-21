@@ -1,10 +1,15 @@
 <?php
 require('../../classes/PdoDB.php');
 require('../../classes/App.php');
+
+// Encryption files
+require '../../classes/Aes.php';     // AES PHP implementation
+require '../../classes/AesCtr.php';  // AES Counter Mode implementation
+
 $app = new App();
 $app->safesession();
 if (!isset($_SESSION['tappAdminId'])) {
-    print '<script> self.location = "' . $app->server_root_dir('sign_in') . '" </script>';
+    print '<script> self.location = "' . $app->server_root_dir('admin') . '" </script>';
 }
 ?>
 <!doctype html>
@@ -18,7 +23,7 @@ if (!isset($_SESSION['tappAdminId'])) {
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="../../assets/images/favicon.ico">
+    <link rel="shortcut icon" href="../../assets/images/favicon.png">
     <link href="../../assets/libs/admin-resources/rwd-table/rwd-table.min.css" rel="stylesheet" type="text/css">
 
     <!-- Bootstrap Css -->
@@ -70,8 +75,8 @@ if (!isset($_SESSION['tappAdminId'])) {
 
                                 <div class="page-title-right">
                                     <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Project Verification System</a></li>
-                                        <li class="breadcrumb-item active">Manage Projects</li>
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);"><?= $app->app_title ?></a></li>
+                                        <li class="breadcrumb-item active">Manage Products</li>
                                     </ol>
                                 </div>
 
@@ -83,7 +88,7 @@ if (!isset($_SESSION['tappAdminId'])) {
                         <div class="col-sm-12">
                             <div class="card mt-5">
                                 <?php
-                                $querySQL = "SELECT * FROM pv_projects";
+                                $querySQL = "SELECT * FROM pt_products ORDER BY id DESC";
                                 $db_handle = $dbh->prepare($querySQL);
                                 $db_handle->execute();
                                 $counter = 1;
@@ -98,22 +103,31 @@ if (!isset($_SESSION['tappAdminId'])) {
                                                         <th>ID</th>
                                                         <th>Title</th>
                                                         <th>Description</th>
+                                                        <th>Price</th>
+                                                        <th>Picture</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <?php
                                                     while ($paramGetFields = $db_handle->fetch(PDO::FETCH_OBJ)) {
                                                         $id = $paramGetFields->id;
+                                                        $btnId = AesCtr::encrypt($id, 'aes256', 256);
                                                     ?>
                                                     <tr data-id="<?=$counter?>" style="cursor: pointer;">
                                                         <td><?=$counter?></td>
                                                         <td><?php echo $paramGetFields->title; ?></td>
                                                         <td><?php echo $paramGetFields->description; ?></td>
+                                                        <td>₦<?php echo number_format($paramGetFields->price); ?></td>
+                                                        <td><img src="../../assets/files/<?php echo $paramGetFields->img_name; ?>" alt="IMG" height="50" width="50"></td>
                                                         <td><span style="width: 100%;" id="userSpan<?= $paramGetFields->id ?>" class="btn btn-sm btn-<?= ($paramGetFields->status == '0') ?  'warning' : 'success'; ?>"><?= ($paramGetFields->status == '0') ? 'Inactive' :  'Active'; ?></span></td>
                                                         <td>
-                                                            <a style="width: 100%;" btnId='<?= $paramGetFields->id ?>' id="user<?= $paramGetFields->id ?>" href="#" class="btn btn-<?= ($paramGetFields->status == '0') ?  'success activateProject' : 'warning deactivateProject'; ?>"><i class="fas fa-key"></i> <?= ($paramGetFields->status == '0') ?  'Activate' : 'Deactivate'; ?></a>
+                                                            <a style="width: 100%;" btnId='<?= $paramGetFields->id ?>' id="user<?= $paramGetFields->id ?>" href="#" class="btn btn-<?= ($paramGetFields->status == '0') ?  'success activateProduct' : 'warning deactivateProduct'; ?>"><i class="fas fa-key"></i> <?= ($paramGetFields->status == '0') ?  'Activate' : 'Deactivate'; ?></a>
+                                                        </td>
+                                                        <td>
+                                                            <a style="width: 100%;" btnId='<?= $btnId ?>' href="#" class="btn btn-outline-info editProduct"><i class="fas fa-edit"></i> Edit</a>
                                                         </td>
                                                     </tr>
                                                     <?php

@@ -18,7 +18,7 @@ if (!isset($_SESSION['tappAdminId'])) {
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="../../assets/images/favicon.ico">
+    <link rel="shortcut icon" href="../../assets/images/favicon.png">
 
     <!-- Bootstrap Css -->
     <link href="../../assets/css/bootstrap.min.css" id="sbootstrap-style" rel="stylesheet" type="text/css" />
@@ -77,7 +77,7 @@ if (!isset($_SESSION['tappAdminId'])) {
 
                                 <div class="page-title-right">
                                     <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Project Verification System</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);"><?= $app->app_title ?></a></li>
                                         <li class="breadcrumb-item active">My Profile</li>
                                     </ol>
                                 </div>
@@ -88,7 +88,7 @@ if (!isset($_SESSION['tappAdminId'])) {
                     <!-- end page title -->
 
                     <?php
-                    $db_handle = $dbh->prepare("SELECT * FROM pv_admin WHERE id=:id LIMIT 1");
+                    $db_handle = $dbh->prepare("SELECT * FROM pt_admin WHERE id=:id LIMIT 1");
                     $db_handle->execute(array(':id' => $_SESSION['tappAdminId']));
                     $sn = 1;
                     if ($db_handle->rowCount() > 0) {
