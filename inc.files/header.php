@@ -69,7 +69,7 @@
                                             <a href="#contact">Conatct</a>
                                         </li>
                                         <li class="<?php if ($link == "store") {echo "active"; } ?>">
-                                            <a href="store/" target="_blank">Store</a>
+                                            <a href="store" target="_blank">Store</a>
                                         </li>
                                     </ul>
                                 </nav>

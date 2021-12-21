@@ -273,10 +273,23 @@ $(document).ready(function () {
         return false;
     });
 
-    /* admin edit listing sending function */
+    /* admin edit product sending function */
     jQuery(document).on('click', '.editProduct', function (e) {
         btnId = $(this).attr('btnId');
         self.location = path + "admin/dashboard/edit_product?btnId=" + btnId;
+        return false;
+    });
+
+    /* client add to cart sending function */
+    jQuery(document).on('click', '.addToCart', function (e) {
+        btnId = $(this).attr('btnId');
+        btnPrice = $(this).attr('btnPrice');
+        // cartIds = $("#cartIds").val();
+        // if(!cartIds.includes(btnId)){
+            $.post(path + 'inc.files/process_script?mode=addToCart', { btnId: btnId, btnPrice: btnPrice }, function (data) {
+                $('#formSpan').html(data);
+            });
+        // }
         return false;
     });
 

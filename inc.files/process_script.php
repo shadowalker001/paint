@@ -235,115 +235,6 @@ if (isset($_GET['mode'])) {
             print '<script type="text/javascript">$(\'#smtBtnPass\').html(\'Update Password<i class="fas fa-sign ml-1"></i>\');</script>';
             exit;
         }
-    } else if ($mode == "uploadForm") {
-        $title = ucwords($itle);
-        $grade = $grade;
-        $term = $app->getValue("term", "vc_system", "id", "1");
-        $video_description = $video_description;
-        $schedule = $schedule;
-
-        if ($app->strIsEmpty($title) or $app->strIsEmpty($grade) or $app->strIsEmpty($video_description) or $app->strIsEmpty($schedule)) {
-            $app->sweetAlert('warning', 'Fields cannot be Empty!');
-            $app->buttonController('#smtBtn', 'enable');
-            print '<script type="text/javascript">$(\'#smtBtn\').html(\'Upload <i class="fas fa-upload"></i>\');</script>';
-            die;
-        }
-
-        $errors = 0;
-        $exists = 0;
-        $success = 0;
-
-        for ($i = 0; $i < count($_FILES); $i++) {
-            # code...
-            $pos = 'file_' . $i;
-            $final_name = str_replace(" ", "", strtolower(trim($_FILES[$pos]['name'])));
-            $final_name = "file_vc_" . $app->generateRandomString(10) . "_" . time() . $final_name;
-
-            $location = "../vendor/files/$final_name";
-            $loc = $app->server_root_dir("vendor/files/$final_name");
-            $explode = explode(".", $_FILES[$pos]['name']);
-            $type = end($explode);
-
-            if (!file_exists($location)) {
-                $fileData = file_get_contents($_FILES[$pos]['tmp_name']);
-                if (file_put_contents($location, $fileData)) {
-                    unlink($_FILES[$pos]['tmp_name']);
-                    // if(move_uploaded_file($_FILES[$pos]['tmp_name'],$location)){
-                    $querySQL = "INSERT INTO vc_uploads SET term=:term, title=:title, grade=:grade, video=:video, description=:description, schedule=:schedule, date=NOW()";
-                    $db_handle = $dbh->prepare($querySQL);
-                    if ($db_handle->execute(array(':term' => $term, 'title' => $title, 'grade' => $grade, 'video' => $final_name, 'description' => $video_description, 'schedule' => $schedule))) {
-                        $success += 1;
-                    } else {
-                        $errors += 1;
-                    }
-                } else {
-                    $errors += 1;
-                }
-            } else {
-                $exists += 1;
-            }
-        }
-
-        if ($errors == 0 && $exists == 0) {
-            $app->sweetAlert('success', 'Record created successfully!');
-            $app->buttonController('#smtBtn', 'enable');
-            print '<script type="text/javascript">$(\'#uploadForm\').trigger("reset"); $(\'#smtBtn\').html(\'Upload <i class="fas fa-upload"></i>\');</script>';
-        } else {
-            $app->sweetAlert('warning', 'Server error, try again later!');
-            $app->buttonController('#smtBtn', 'enable');
-            print '<script type="text/javascript">$(\'#uploadForm\').trigger("reset"); $(\'#smtBtn\').html(\'Upload <i class="fas fa-upload"></i>\');</script>';
-        }
-    } else if ($mode == "productForm") {
-        if (empty($title) || !is_numeric($title)) {
-            $app->sweetAlert('warning', 'Fields cannot be Empty!');
-            $app->buttonController('#smtBtn', 'enable');
-            print '<script type="text/javascript"> $(\'#smtBtn\').html(\'Submit Product <i class="fas fa-sign-in-alt"></i>\');</script>';
-            die;
-        }
-
-        if ($app->valueExists("id", "pt_products", $title, "AND status=1") == false) {
-            $app->sweetAlert('warning', 'Product is not registered!');
-            $app->buttonController('#smtBtn', 'enable');
-            print '<script type="text/javascript"> $(\'#smtBtn\').html(\'Submit Product <i class="fas fa-sign-in-alt"></i>\');</script>';
-            die;
-        }
-
-        if ($app->valueExists("Product_id", "pt_students", $title) == true) {
-            $app->sweetAlert('warning', 'Product already chosen by another student!');
-            $app->buttonController('#smtBtn', 'enable');
-            print '<script type="text/javascript"> $(\'#smtBtn\').html(\'Submit Product <i class="fas fa-sign-in-alt"></i>\');</script>';
-            die;
-        }
-
-        try {
-            $db_handle = $dbh->prepare("UPDATE pt_students SET Product_id=:Product_id WHERE id=:id");
-            if ($db_handle->execute(array(':Product_id' => $title, ':id' => $_SESSION['tappUserId']))) {
-                $app->sweetAlert('success', 'Product Assigned to student successfully!');
-                $app->buttonController('#smtBtn', 'enable');
-                print '<script type="text/javascript">$(\'#ProductForm\').trigger("reset"); $(\'#smtBtn\').html(\'Submit Product <i class="fa sign-in-alt"></i>\');</script>';
-                print '<script type="text/javascript"> setTimeout(() => { self.location = "' . $app->server_root_dir("user/dashboard/my_Product") . '"; }, 1000); </script>';
-            }
-        } catch (PDOException $error) {
-            $app->buttonController('#smtBtn', 'enable');
-            print '<script type="text/javascript"> $(\'#smtBtn\').html(\'Submit Product <i class="fas fa-sign-in-alt"></i>\');</script>';
-            die($error->getMessage());
-        }
-    } else if ($mode == "processProduct") {
-        $titles = explode(" ", $title);
-        $join = implode("%' OR title LIKE '%", $titles);
-        $querySQL = "SELECT * FROM pt_products WHERE title LIKE '%$join%'";
-        $db_handle = $dbh->prepare($querySQL);
-        $db_handle->execute();
-        $count = 1;
-        print "<script>$('.processor').css('display', 'block');</script>";
-        if ($db_handle->rowCount() > 0) {
-            while ($paramGetFields = $db_handle->fetch(PDO::FETCH_OBJ)) {
-                print "<p>#$count. $paramGetFields->title</p>";
-                $count++;
-            }
-        } else {
-            print '<p>No match results</p>';
-        }
     } else if ($mode == "addproductForm") {
         $title = ucwords($title);
         $desc = ucwords($desc);
@@ -485,6 +376,30 @@ if (isset($_GET['mode'])) {
             $app->sweetAlert('warning', 'Server error, try again later!');
             $app->buttonController('#smtBtn', 'enable');
             print '<script type="text/javascript">$(\'#createListingForm\').trigger("reset"); $(\'#smtBtn\').html(\'Create Listing <i class="fa fa-sign-in ml-1"></i>\');</script>';
+        }
+    } else if ($mode == "addToCart"){
+        if(isset($_SESSION["cart"])){
+            $cart = $_SESSION["cart"];
+            if(!in_array($btnId, $cart["btnId"])){
+                array_push($cart["btnId"], $btnId);
+                array_push($cart["btnPrice"], $btnPrice);
+                $_SESSION["cart"] = $cart;
+                
+                print '<script type="text/javascript"> 
+                    $(\'.cartItems\').html(\''.count($cart["btnId"]).'\');
+                    $(\'.cartSumPrice\').html(\'₦'.number_format(array_sum($cart["btnPrice"])).'\');
+                </script>';
+                print "<script type='text/javascript'>toastr.success(\"Added to cart!\")</script>";
+            }else{
+                print "<script type='text/javascript'>toastr.success(\"Already in cart!\")</script>";
+            }
+        }else{
+            $_SESSION["cart"] = ['btnId'=>[$btnId], 'btnPrice'=>[$btnPrice]];
+            print '<script type="text/javascript"> 
+                $(\'.cartItems\').html(\'1\');
+                $(\'.cartSumPrice\').html(\'₦'.number_format($btnPrice).'\');
+            </script>';
+            print "<script type='text/javascript'>toastr.success(\"Added to cart!\")</script>";
         }
     }
 }

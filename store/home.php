@@ -5,6 +5,7 @@ require('../classes/App.php');
 require '../classes/Aes.php';     // AES PHP implementation
 require '../classes/AesCtr.php';  // AES Counter Mode implementation
 $app = new App();
+$app->safesession();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,6 +24,8 @@ $app = new App();
     <link href="fonts/icomoon/icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Open%20Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendors/sweetalert2/sweetalert2.min.css">
+    <link rel="stylesheet" href="../vendors/toaster/toastr.min.css">
 </head>
 
 <body class="template-collection has-smround-btns has-loader-bg equal-height has-sm-container">
@@ -66,8 +69,8 @@ $app = new App();
                                 <div class="dropdn dropdn_fullheight minicart">
                                     <a href="cart" class="dropdn-link js-dropdn-link minicart-link" data-panel="#dropdnMinicart">
                                         <i class="icon-basket"></i>
-                                        <span class="minicart-qty">3</span>
-                                        <span class="minicart-total hide-mobile">₦180</span>
+                                        <span class="minicart-qty cartItems"><?=isset($_SESSION['cart'])?count($_SESSION['cart']['btnId']):0 ?></span>
+                                        <span class="minicart-total hide-mobile cartSumPrice">₦<?=isset($_SESSION['cart'])?number_format(array_sum($_SESSION['cart']['btnPrice'])):0 ?></span>
                                     </a>
                                 </div>
                             </div>
@@ -161,7 +164,7 @@ $app = new App();
                                                         <div class="prd-action">
                                                             <form action="#">
                                                                 <!-- Pick Color<input type="color" name="" id=""> -->
-                                                                <button class="btn js-prd-addtocart" data-product='{"name": "<?= $fetch_obj->title ?>", "path":"../assets/files/<?= $fetch_obj->img_name ?>", "url":"cart", "aspect_ratio":0.778}'>Add
+                                                                <button btnId="<?= $fetch_obj->id ?>" btnPrice="<?= $fetch_obj->price ?>" class="btn js-prd-addtocart addToCart" data-product='{"name": "<?= $fetch_obj->title ?>", "path":"../assets/files/<?= $fetch_obj->img_name ?>", "url":"cart", "aspect_ratio":0.778}'>Add
                                                                     To Cart</button>
                                                             </form>
                                                         </div>
@@ -173,7 +176,7 @@ $app = new App();
                                                         <div class="prd-action">
                                                             <div class="prd-action-left">
                                                                 <form action="#">
-                                                                    <button class="btn js-prd-addtocart" data-product='{"name": "<?= $fetch_obj->title ?>", "path":"../assets/files/<?= $fetch_obj->img_name ?>", "url":"cart", "aspect_ratio":0.778}'>Add
+                                                                    <button btnId="<?= $fetch_obj->id ?>" btnPrice="<?= $fetch_obj->price ?>" class="btn js-prd-addtocart addToCart" data-product='{"name": "<?= $fetch_obj->title ?>", "path":"../assets/files/<?= $fetch_obj->img_name ?>", "url":"cart", "aspect_ratio":0.778}'>Add
                                                                         To Cart</button>
                                                                 </form>
                                                             </div>
@@ -398,7 +401,10 @@ $app = new App();
     <script src="js/vendor-special/jquery.min.js"></script>
     <script src="js/vendor-special/jquery.ez-plus.js"></script>
     <script src="js/vendor/vendor.min.js"></script>
+    <script src="../vendors/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="../vendors/toaster/toastr.min.js"></script>
     <script src="js/app-html.js"></script>
+    <script src="../static/js/functions.js?<?=time()?>"></script>
 </body>
 
 </html>

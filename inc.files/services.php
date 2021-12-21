@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-xxl-8 offset-xxl-2 col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
                 <div class="section__title-wrapper mb-80 text-center">
-                    <span class="section__title-pre section__title-pre center">What We Offer</span>
+                    <span class="section__title-pre section__title-pre center text-light">What We Offer</span>
                     <h2 class="section__title section__title">We Help You Make Your Dream Painting</h2>
                 </div>
             </div>
