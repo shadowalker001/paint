@@ -70,7 +70,7 @@ if (!isset($_SESSION['tappAdminId'])) {
                 <div class="container-fluid">
 
                     <!-- start page title -->
-                    <div class="row">
+                    <div class="row" style="overflow: auto;">
                         <div class="col-12">
                             <div class="page-title-box d-flex align-items-center justify-content-between">
                                 <h4 class="mb-0">My Profile</h4>
@@ -94,7 +94,7 @@ if (!isset($_SESSION['tappAdminId'])) {
                     if ($db_handle->rowCount() > 0) {
                         while ($fetch_obj = $db_handle->fetch(PDO::FETCH_OBJ)) {
                     ?>
-                            <div class="row">
+                            <div class="row" style="overflow: auto;">
                                 <div class="col-sm-8 offset-2">
                                     <div class="card">
                                         <div class="card-body">

@@ -337,7 +337,7 @@ if (isset($_GET['mode'])) {
                         try {
                             $db_handle = $dbh->prepare("UPDATE pt_products SET title=:title, description=:description, price=:price, rating=:rating, img_name=:img_name WHERE id='$btnId'");
                             if ($db_handle->execute(array(':title' => $title, ':description' => $desc, ':price' => $price, ':rating' => $rating, ':img_name' => $final_name))) {
-                                unlink("../assets/files/".$old_img_name);
+                                unlink("../assets/files/" . $old_img_name);
                                 $app->sweetAlert('success', 'Product updated successfully!');
                                 $app->buttonController('#smtBtn', 'enable');
                                 print '<script type="text/javascript">$(\'#file\').val(""); $(\'#smtBtn\').html(\'Update Product <i class="fa sign-in-alt"></i>\');</script>';
@@ -356,7 +356,7 @@ if (isset($_GET['mode'])) {
                     $exists += 1;
                 }
             }
-        }else{
+        } else {
             try {
                 $db_handle = $dbh->prepare("UPDATE pt_products SET title=:title, description=:description, price=:price, rating=:rating");
                 if ($db_handle->execute(array(':title' => $title, ':description' => $desc, ':price' => $price, ':rating' => $rating))) {
@@ -377,29 +377,102 @@ if (isset($_GET['mode'])) {
             $app->buttonController('#smtBtn', 'enable');
             print '<script type="text/javascript">$(\'#createListingForm\').trigger("reset"); $(\'#smtBtn\').html(\'Create Listing <i class="fa fa-sign-in ml-1"></i>\');</script>';
         }
-    } else if ($mode == "addToCart"){
-        if(isset($_SESSION["cart"])){
+    } else if ($mode == "addToCart") {
+        if (isset($_SESSION["cart"])) {
             $cart = $_SESSION["cart"];
-            if(!in_array($btnId, $cart["btnId"])){
+            if (!in_array($btnId, $cart["btnId"])) {
                 array_push($cart["btnId"], $btnId);
                 array_push($cart["btnPrice"], $btnPrice);
                 $_SESSION["cart"] = $cart;
-                
+
                 print '<script type="text/javascript"> 
-                    $(\'.cartItems\').html(\''.count($cart["btnId"]).'\');
-                    $(\'.cartSumPrice\').html(\'₦'.number_format(array_sum($cart["btnPrice"])).'\');
+                    $(\'.cartItems\').html(\'' . count($cart["btnId"]) . '\');
+                    $(\'.cartSumPrice\').html(\'₦' . number_format(array_sum($cart["btnPrice"])) . '\');
+                    $("#cartIds").val("'.str_replace('"', "'", json_encode($cart['btnId'])).'");
                 </script>';
                 print "<script type='text/javascript'>toastr.success(\"Added to cart!\")</script>";
-            }else{
+            } else {
                 print "<script type='text/javascript'>toastr.success(\"Already in cart!\")</script>";
             }
-        }else{
-            $_SESSION["cart"] = ['btnId'=>[$btnId], 'btnPrice'=>[$btnPrice]];
+        } else {
+            $_SESSION["cart"] = ['btnId' => [$btnId], 'btnPrice' => [$btnPrice]];
             print '<script type="text/javascript"> 
                 $(\'.cartItems\').html(\'1\');
-                $(\'.cartSumPrice\').html(\'₦'.number_format($btnPrice).'\');
+                $(\'.cartSumPrice\').html(\'₦' . number_format($btnPrice) . '\');
             </script>';
             print "<script type='text/javascript'>toastr.success(\"Added to cart!\")</script>";
         }
+    } else if ($mode == "addColorForm") {
+        if (empty($ccolor) || empty($cname)) {
+            $app->sweetAlert('warning', 'Fields cannot be Empty!');
+            $app->buttonController('#smtBtnColor', 'enable');
+            print '<script type="text/javascript"> $(\'#smtBtnColor\').html(\'Add <i class="fas fa-plus"></i>\');</script>';
+            die;
+        }
+        $color = ['name' => ucfirst(strtolower($cname)), "color" => strtolower($ccolor)];
+        $old_color = $app->getValue("color", "pt_products", "id", $btnId);
+        if ($old_color == "") {
+            $old_color = [];
+        } else {
+            $old_color = json_decode($old_color);
+        }
+        array_push($old_color, $color);
+        $new_color = json_encode($old_color);
+        $db_handle = $dbh->prepare("UPDATE pt_products SET color=:color WHERE id='$btnId'");
+        if ($db_handle->execute(array(':color' => $new_color))) {
+            $btnIdEnc = AesCtr::encrypt($btnId, 'aes256', 256);
+            $app->sweetAlert('success', 'Color added successfully!');
+            $app->buttonController('#smtBtnColor', 'enable');
+            print '<script type="text/javascript">$(\'#addColorForm\').trigger("reset"); $(\'#smtBtnColor\').html(\'Add <i class="fas fa-plus"></i>\');</script>';
+            print '<script type="text/javascript"> setTimeout(() => { self.location = "' . $app->server_root_dir("admin/dashboard/edit_product?btnId=$btnIdEnc") . '"; }, 1000); </script>';
+        }
+    } else if ($mode == "removeColorForm") {
+        if (empty($colorId)) {
+            $app->sweetAlert('warning', 'Fields cannot be Empty!');
+            $app->buttonController('#smtBtnColorRemove', 'enable');
+            print '<script type="text/javascript"> $(\'#smtBtnColorRemove\').html(\'Remove <i class="fas fa-minus"></i>\');</script>';
+            die;
+        }
+        $colorId -= $colorId;
+
+        $old_color = $app->getValue("color", "pt_products", "id", $btnId);
+        if ($old_color != "") {
+            $old_color = json_decode($old_color);
+            unset($old_color[$colorId]);
+            $new_color = json_encode(array_values($old_color));
+            $db_handle = $dbh->prepare("UPDATE pt_products SET color=:color WHERE id='$btnId'");
+            if ($db_handle->execute(array(':color' => $new_color))) {
+                $btnIdEnc = AesCtr::encrypt($btnId, 'aes256', 256);
+                $app->sweetAlert('success', 'Color removed successfully!');
+                $app->buttonController('#smtBtnColorRemove', 'enable');
+                print '<script type="text/javascript">$(\'#addColorForm\').trigger("reset"); $(\'#smtBtnColorRemove\').html(\'Remove <i class="fas fa-minus"></i>\');</script>';
+                print '<script type="text/javascript"> setTimeout(() => { self.location = "' . $app->server_root_dir("admin/dashboard/edit_product?btnId=$btnIdEnc") . '"; }, 1000); </script>';
+            }
+        }
+    } else if ($mode == "removeQty"){
+        if (isset($_SESSION["cart"])) {
+            $cart = $_SESSION["cart"];
+            for ($i=0; $i < count($cart['btnId']); $i++) { 
+                # code...
+                if($cart['btnId'][$i]==$btnId){
+                    unset($cart['btnId'][$i]);
+                    unset($cart['btnPrice'][$i]);
+                }
+            }
+            if(count($cart['btnId'])==0){
+                unset($_SESSION["cart"]);
+            }else{
+                $cart['btnId'] = array_values($cart['btnId']);
+                $cart['btnPrice'] = array_values($cart['btnPrice']);
+                $_SESSION["cart"] = $cart;
+            }
+            print '<script type="text/javascript">
+            $(\'.cartSumPrice\').html(\'₦' . number_format(array_sum($cart["btnPrice"])) . '\');
+            setTimeout(() => { self.location = "' . $app->server_root_dir("store/cart") . '"; }, 1000); </script>';
+        }
+    } else if($mode == "clearAll"){
+        unset($_SESSION["cart"]);
+        print '<script type="text/javascript">
+        setTimeout(() => { self.location = "' . $app->server_root_dir("store/home") . '"; }, 1000); </script>';
     }
 }

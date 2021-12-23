@@ -78,7 +78,7 @@ if (!isset($_SESSION['tappAdminId'])) {
                         </div>
                     </div>
                     <!-- end page title -->
-                    <div class="row">
+                    <div class="row" style="overflow: auto;">
                         <div class="col-sm-8 offset-2">
                             <div class="card mt-5">
                                 <div class="card-body">

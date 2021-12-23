@@ -282,14 +282,130 @@ $(document).ready(function () {
 
     /* client add to cart sending function */
     jQuery(document).on('click', '.addToCart', function (e) {
+        e.preventDefault();
+
         btnId = $(this).attr('btnId');
         btnPrice = $(this).attr('btnPrice');
-        // cartIds = $("#cartIds").val();
-        // if(!cartIds.includes(btnId)){
+        cartIds = $("#cartIds").val();
+        if(cartIds!=''){
+            if(cartIds.includes(btnId)){
+                toastr.success("Already in cart!")
+                return false;
+            }
+        }
+        if(!cartIds.includes(btnId)){
             $.post(path + 'inc.files/process_script?mode=addToCart', { btnId: btnId, btnPrice: btnPrice }, function (data) {
                 $('#formSpan').html(data);
             });
-        // }
+        }
+        return false;
+    });
+
+    /* admin update color function */
+    $('#addColorForm').submit(function (e) {
+        $('#smtBtnColor').attr('disabled', 'disabled');
+        $('#smtBtnColor').html('<center>Processing... <div class="spinner-border spinner-border-sm" role="status"></div></center>');
+        values = $('#addColorForm :input').serializeArray();
+        $.post(path + 'inc.files/process_script?mode=addColorForm', values, function (data) {
+            $('#formSpanAddColor').html(data);
+        });
+        return false;
+    });
+
+    /* admin update color function */
+    $('#removeColorForm').submit(function (e) {
+        $('#smtBtnColorRemove').attr('disabled', 'disabled');
+        $('#smtBtnColorRemove').html('<center>Processing... <div class="spinner-border spinner-border-sm" role="status"></div></center>');
+        values = $('#removeColorForm :input').serializeArray();
+        $.post(path + 'inc.files/process_script?mode=removeColorForm', values, function (data) {
+            $('#formSpanRemoveColor').html(data);
+        });
+        return false;
+    });
+
+    /*user carting sending function */
+    $('.decrease').click(function (e) {
+        btnId = $(this).attr("btnId");
+        price = $(this).attr("price");
+        val = $("#qtyVal"+btnId).val();
+        if(val>1){
+            $("#qtyVal"+btnId).val(val-1);
+            $(".qtyTotal"+btnId).html('₦'+Number((val-1)*price).toLocaleString('en'));
+
+            v1 = $('.cartSumPrice').html();
+            v2 = v1.replace("₦", "").replace(",", "");
+            v3= parseInt(v2)-parseInt(price);
+            $('.cartSumPrice').html('₦' +Number(v3).toLocaleString('en'));
+        }
+        return false;
+    });
+
+    /*user carting sending function */
+    $('.increase').click(function (e) {
+        btnId = $(this).attr("btnId");
+        price = $(this).attr("price");
+        val = $("#qtyVal"+btnId).val();
+        $("#qtyVal"+btnId).val(parseInt(val)+1);
+        $(".qtyTotal"+btnId).html('₦'+Number((parseInt(val)+1)*price).toLocaleString('en'));
+
+        v1 = $('.cartSumPrice').html();
+        v2 = v1.replace("₦", "").replace(",", "");
+        v3= parseInt(v2)+parseInt(price);
+        $('.cartSumPrice').html('₦' +Number(v3).toLocaleString('en'));
+        return false;
+    });
+
+    $('.clearAll').click(function () {
+        $.post(path + 'inc.files/process_script?mode=clearAll', function (data) {
+            $('#formSpan').html(data);
+        });
+        return false;
+    })
+
+    /*user carting sending function */
+    $('.removeQty').click(function (e) {
+        btnId = $(this).attr("btnId");
+        $.post(path + 'inc.files/process_script?mode=removeQty', {btnId:btnId}, function (data) {
+            $('#formSpan').html(data);
+        });
+        return false;
+    });
+
+    $('.icon-basket').click(function () {
+        window.location = path+"store/cart";
+    })
+
+    $(".colorId").on('change', function() {
+        $(this).css('background-color', $(this).find(':selected').attr('color'));
+    })
+
+    /* checkout function */
+    $('#checkoutForm').submit(function (e) {
+        $('#smtBtn').attr('disabled', 'disabled');
+        $('#smtBtn').html('<center>Processing... <div class="spinner-border spinner-border-sm" role="status"></div></center>');
+        values = $('#checkoutForm :input').serializeArray();
+        // $.post(path + 'inc.files/process_script?mode=checkoutForm', values, function (data) {
+        //     $('#formSpan').html(data);
+        // });
+        return false;
+    });
+
+    /* admin update color function */
+    $('#searchForm').submit(function (e) {
+        finder = $("#searchProducts").val();
+        if(window.location.href==path + 'store/home'){
+            jQuery("#dataLoader").load(path + "store/inc.files/loadFilter", {finder:finder}, function (response, status) {
+                if (status === 'error') {
+                    console.log("Failed to load");
+                } else {
+                    $("#dataLoader").html(response);
+                    // $('#searchForm').trigger("reset");
+                    $(".js-gridview").trigger("click");
+                    $(".js-listview").trigger("click");
+                    // $(".icon-search").trigger("click");
+                }
+            });
+        }
         return false;
     });
 
@@ -304,14 +420,6 @@ $(document).ready(function () {
     /* logout admin sending function */
     $('.logOutAdmin').click(function (e) {
         $.post(path + 'inc.files/process_script?mode=logOutAdmin', function (data) {
-            $('.logOutSpan').html(data);
-        });
-        return false;
-    });
-
-    /* logout admin sending function */
-    $('.logOutGuardian').click(function (e) {
-        $.post(path + 'inc.files/process_script?mode=logOutGuardian', function (data) {
             $('.logOutSpan').html(data);
         });
         return false;
@@ -347,16 +455,6 @@ $(document).ready(function () {
         var returnValue = confirm("Are you sure?");
         if (returnValue == true) {
             $.post(path + 'inc.files/process_script?mode=manageSystemForm', values, function (data) {
-                $('#formSpan').html(data);
-            });
-        }
-        return false;
-    });
-
-    $("#nextGrade").click(function (params) {
-        var returnValue = confirm("Are you sure?");
-        if (returnValue == true) {
-            $.post(path + 'inc.files/process_script?mode=nextGrade', { returnValue: returnValue }, function (data) {
                 $('#formSpan').html(data);
             });
         }

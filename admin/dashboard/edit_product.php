@@ -97,7 +97,7 @@ if (!isset($_SESSION['tappAdminId'])) {
                         while ($fetch_obj = $db_handle->fetch(PDO::FETCH_OBJ)) {
                     ?>
 
-                            <div class="row">
+                            <div class="row" style="overflow: auto;">
                                 <div class="col-sm-8 offset-2">
                                     <div class="card mt-5">
                                         <div class="card-body">
@@ -108,30 +108,30 @@ if (!isset($_SESSION['tappAdminId'])) {
                                                     <div class="col-sm-12">
                                                         <div class="form-group mb-3">
                                                             <label for="">Product Title</label>
-                                                            <input type="text" name="title" id="title" value="<?php echo $fetch_obj->title?>" class="form-control" placeholder="project title" required>
+                                                            <input type="text" name="title" id="title" value="<?php echo $fetch_obj->title ?>" class="form-control" placeholder="project title" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-12">
                                                         <div class="form-group mb-3">
                                                             <label for=""> Product Description</label><br>
-                                                            <textarea name="desc" id="desc" maxlength="535" rows="3" class="form-control" required><?php echo $fetch_obj->description?></textarea>
+                                                            <textarea name="desc" id="desc" maxlength="535" rows="3" class="form-control" required><?php echo $fetch_obj->description ?></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <div class="form-group mb-3">
                                                             <label for="">Product Price (₦)</label>
-                                                            <input type="number" min="5" name="price" id="price" value="<?php echo $fetch_obj->price?>" class="form-control" placeholder="project price" required>
+                                                            <input type="number" min="5" name="price" id="price" value="<?php echo $fetch_obj->price ?>" class="form-control" placeholder="project price" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <div class="form-group mb-3">
                                                             <label for="">Product Rating</label>
                                                             <select name="rating" id="rating" class="form-control">
-                                                                <option value="1" <?= $fetch_obj->rating=="1"?"selected":"" ?>>1/5 Star</option>
-                                                                <option value="2" <?= $fetch_obj->rating=="2"?"selected":"" ?>>2/5 Star</option>
-                                                                <option value="3" <?= $fetch_obj->rating=="3"?"selected":"" ?>>3/5 Star</option>
-                                                                <option value="4" <?= $fetch_obj->rating=="4"?"selected":"" ?>>4/5 Star</option>
-                                                                <option value="5" <?= $fetch_obj->rating=="5"?"selected":"" ?>>5/5 Star</option>
+                                                                <option value="1" <?= $fetch_obj->rating == "1" ? "selected" : "" ?>>1/5 Star</option>
+                                                                <option value="2" <?= $fetch_obj->rating == "2" ? "selected" : "" ?>>2/5 Star</option>
+                                                                <option value="3" <?= $fetch_obj->rating == "3" ? "selected" : "" ?>>3/5 Star</option>
+                                                                <option value="4" <?= $fetch_obj->rating == "4" ? "selected" : "" ?>>4/5 Star</option>
+                                                                <option value="5" <?= $fetch_obj->rating == "5" ? "selected" : "" ?>>5/5 Star</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -151,7 +151,7 @@ if (!isset($_SESSION['tappAdminId'])) {
 
                                                     <div class="col-sm-12">
                                                         <div class="form-group mb-3">
-                                                            <input type="hidden" id="btnId" name="btnId" value="<?=$btnId?>">
+                                                            <input type="hidden" id="btnId" name="btnId" value="<?= $btnId ?>">
                                                             <input type="hidden" name="byepass" id="byepass" value="egutsen">
                                                             <button id="smtBtn" type="submit" name="submit" class="btn btn-outline-primary" style="width: 100%;">Add Product <i class="fas fa-sign-in-alt"></i></button>
                                                         </div>
@@ -161,6 +161,75 @@ if (!isset($_SESSION['tappAdminId'])) {
                                         </div>
                                     </div>
                                 </div> <!-- end col-->
+                                <div class="col-sm-8 col-sm-8 offset-2">
+                                    <div class="card card-default mt-5">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Add Product Color(s)</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <form method="POST" id="addColorForm" action="" autocomplete="off">
+                                                <center><span class="formSpanAddColor text-danger" id="formSpanAddColor"></span>
+                                                </center>
+                                                <div class="form-group mb-3">
+                                                    <label for="">Choose Color</label>
+                                                    <input name="ccolor" id="ccolor" type="color" class="form-control" required>
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label for="">Color Name</label>
+                                                    <input name="cname" id="cname" type="text" class="form-control" placeholder="Enter color name" required>
+                                                </div>
+
+                                                <div class="form-group mb-3">
+                                                    <input type="hidden" id="btnId" name="btnId" value="<?= $btnId ?>">
+                                                    <input type="hidden" name="byepass" id="byepass" value="egutsen">
+                                                    <button id="smtBtnColor" type="submit" name="submit" class="btn btn-outline-primary" style="width: 100%;">Add <i class="fas fa-plus"></i></button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <style>
+                                    option:hover {
+                                        background-color: transparent !important;
+                                    }
+                                </style>
+                                <div class="col-sm-8 col-sm-8 offset-2">
+                                    <div class="card card-default mt-5">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Remove Product Color(s)</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <form method="POST" id="removeColorForm" action="" autocomplete="off">
+                                                <center><span class="formSpanRemoveColor text-danger" id="formSpanRemoveColor"></span>
+                                                </center>
+                                                <div class="form-group mb-3">
+                                                    <!-- <label for="">Choose Color</label> -->
+                                                    <select name="colorId" id="colorId" class="form-control" required>
+                                                        <?php
+                                                        $color = $fetch_obj->color;
+                                                        if ($color != "") {
+                                                            echo '<option value="">Choose Color</option>';
+                                                            $color = json_decode($color);
+                                                            for ($i = 0; $i < count($color); $i++) {
+                                                                # code...
+                                                                echo '<option color="' . $color[$i]->color . '" style="background-color:' . $color[$i]->color . '" value="' . ($i + 1) . '">' . $color[$i]->name . ' (' . $color[$i]->color . ')</option>';
+                                                            }
+                                                        } else {
+                                                            echo '<option value="">No color added</option>';
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+
+                                                <div class="form-group mb-3">
+                                                    <input type="hidden" id="btnId" name="btnId" value="<?= $btnId ?>">
+                                                    <input type="hidden" name="byepass" id="byepass" value="egutsen">
+                                                    <button id="smtBtnColorRemove" type="submit" name="submit" class="btn btn-outline-primary" style="width: 100%;">Remove <i class="fas fa-minus"></i></button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div> <!-- end row-->
 
                     <?php }
@@ -200,6 +269,11 @@ if (!isset($_SESSION['tappAdminId'])) {
     <!-- App js -->
     <script src="../../assets/js/app.js"></script>
     <script src="../../static/js/functions.js?<?= time() ?>"></script>
+    <script>
+        $("#colorId").on('change', function() {
+            $(this).css('background-color', $(this).find(':selected').attr('color'));
+        })
+    </script>
 </body>
 
 </html>

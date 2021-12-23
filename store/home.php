@@ -29,57 +29,7 @@ $app->safesession();
 </head>
 
 <body class="template-collection has-smround-btns has-loader-bg equal-height has-sm-container">
-    <header class="hdr-wrap">
-        <div class="hdr">
-            <div class="hdr-content">
-                <div class="container">
-                    <div class="row">
-                        <!-- <div class="col-auto show-mobile">
-                            <div class="menu-toggle"> <a href="category-listview.html#" class="mobilemenu-toggle"><i
-                                        class="icon-menu"></i></a> </div>
-                        </div> -->
-                        <div class="col-auto hdr-logo">
-                            <a href="../home" class="logo">
-                                <img src="../static/img/logo/logo.png" alt="Logo"></a>
-                        </div>
-                        <div class="hdr-nav hide-mobile nav-holder justify-content-center px-4">
-                            <ul class="mmenu mmenu-js">
-                                <li class="mmenu-item--simple-"><a href="category-listview.html#" class="active">Store</a>
-
-                                </li>
-
-                            </ul>
-                        </div>
-                        <div class="hdr-links-wrap col-auto ml-auto">
-                            <div class="hdr-inline-link">
-                                <div class="search_container_desktop">
-                                    <div class="dropdn dropdn_search dropdn_fullwidth">
-                                        <a href="category-listview.html#" class="dropdn-link  js-dropdn-link only-icon"><i class="icon-search"></i><span class="dropdn-link-txt">Search</span></a>
-                                        <div class="dropdn-content">
-                                            <div class="container">
-                                                <form method="get" action="category-listview.html#" class="search search-off-popular">
-                                                    <input name="search" type="text" class="search-input input-empty" placeholder="What are you looking for?">
-                                                    <button type="submit" class="search-button"><i class="icon-search"></i></button>
-                                                    <a href="category-listview.html#" class="search-close js-dropdn-close"><i class="icon-close-thin"></i></a>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="dropdn dropdn_fullheight minicart">
-                                    <a href="cart" class="dropdn-link js-dropdn-link minicart-link" data-panel="#dropdnMinicart">
-                                        <i class="icon-basket"></i>
-                                        <span class="minicart-qty cartItems"><?=isset($_SESSION['cart'])?count($_SESSION['cart']['btnId']):0 ?></span>
-                                        <span class="minicart-total hide-mobile cartSumPrice">₦<?=isset($_SESSION['cart'])?number_format(array_sum($_SESSION['cart']['btnPrice'])):0 ?></span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+    <?php require("inc.files/header.php"); ?>
     <div class="page-content">
         <div class="holder breadcrumbs-wrap mt-0">
             <div class="container">
@@ -92,6 +42,7 @@ $app->safesession();
         <div class="holder">
             <div class="container">
                 <span class="text-center text-danger" id="formSpan"></span>
+                <input type="hidden" name="cartIds" id="cartIds" value="<?= isset($_SESSION['cart']) ? str_replace('"', "'", json_encode($_SESSION['cart']['btnId'])) : '' ?>">
                 <?php
                 $db_handle = $dbh->prepare("SELECT * FROM pt_products WHERE status=1 ORDER BY id DESC");
                 $db_handle->execute();
@@ -113,25 +64,39 @@ $app->safesession();
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg aside">
-                            <div class="prd-grid-wrap">
-                                <div class="prd-listview product-listing data-to-show-3 data-to-show-md-3 data-to-show-sm-2 js-category-grid" data-grid-tab-content>
-                                    <?php
-                                    while ($fetch_obj = $db_handle->fetch(PDO::FETCH_OBJ)) {
-                                        $btnId = AesCtr::encrypt($fetch_obj->id, 'aes256', 256);
-                                    ?>
-                                        <div class="prd prd--style2 prd-labels--max prd-labels-shadow ">
-                                            <div class="prd-inside">
-                                                <div class="prd-img-area">
-                                                    <a href="#product" class="prd-img image-hover-scale image-container">
-                                                        <img src="../assets/files/<?= $fetch_obj->img_name ?>" alt="" srcset="">
-                                                    </a>
-                                                </div>
-                                                <div class="prd-info">
-                                                    <div class="prd-info-wrap">
-                                                        <div class="prd-info-top">
-                                                            <div class="prd-rating">
+                    <div class="dataLoader" id="dataLoader">
+                        <div class="row">
+                            <div class="col-lg aside">
+                                <div class="prd-grid-wrap">
+                                    <div class="prd-listview product-listing data-to-show-3 data-to-show-md-3 data-to-show-sm-2 js-category-grid" data-grid-tab-content>
+                                        <?php
+                                        while ($fetch_obj = $db_handle->fetch(PDO::FETCH_OBJ)) {
+                                            $btnId = AesCtr::encrypt($fetch_obj->id, 'aes256', 256);
+                                        ?>
+                                            <div class="prd prd--style2 prd-labels--max prd-labels-shadow ">
+                                                <div class="prd-inside">
+                                                    <div class="prd-img-area">
+                                                        <a href="#product" class="prd-img image-hover-scale image-container">
+                                                            <img src="../assets/files/<?= $fetch_obj->img_name ?>" alt="" srcset="">
+                                                        </a>
+                                                    </div>
+                                                    <div class="prd-info">
+                                                        <div class="prd-info-wrap">
+                                                            <div class="prd-info-top">
+                                                                <div class="prd-rating">
+                                                                    <?php
+                                                                    for ($i = 1; $i <= 5; $i++) {
+                                                                        # code...
+                                                                        if ($fetch_obj->rating >= $i) {
+                                                                            echo '<i class="icon-star-fill fill"></i>';
+                                                                        } else {
+                                                                            echo '<i class="icon-star-fill"></i>';
+                                                                        }
+                                                                    }
+                                                                    ?>
+                                                                </div>
+                                                            </div>
+                                                            <div class="prd-rating justify-content-center">
                                                                 <?php
                                                                 for ($i = 1; $i <= 5; $i++) {
                                                                     # code...
@@ -143,51 +108,39 @@ $app->safesession();
                                                                 }
                                                                 ?>
                                                             </div>
-                                                        </div>
-                                                        <div class="prd-rating justify-content-center">
-                                                            <?php
-                                                            for ($i = 1; $i <= 5; $i++) {
-                                                                # code...
-                                                                if ($fetch_obj->rating >= $i) {
-                                                                    echo '<i class="icon-star-fill fill"></i>';
-                                                                } else {
-                                                                    echo '<i class="icon-star-fill"></i>';
-                                                                }
-                                                            }
-                                                            ?>
-                                                        </div>
-                                                        <h2 class="prd-title"><a href="#product"><?= $fetch_obj->title ?></a>
-                                                        </h2>
-                                                        <div class="prd-description">
-                                                            <?= $fetch_obj->description ?>
-                                                        </div>
-                                                        <div class="prd-action">
-                                                            <form action="#">
-                                                                <!-- Pick Color<input type="color" name="" id=""> -->
-                                                                <button btnId="<?= $fetch_obj->id ?>" btnPrice="<?= $fetch_obj->price ?>" class="btn js-prd-addtocart addToCart" data-product='{"name": "<?= $fetch_obj->title ?>", "path":"../assets/files/<?= $fetch_obj->img_name ?>", "url":"cart", "aspect_ratio":0.778}'>Add
-                                                                    To Cart</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                    <div class="prd-hovers">
-                                                        <div class="prd-price">
-                                                            <div class="price-new">₦ <?= number_format($fetch_obj->price) ?></div>
-                                                        </div>
-                                                        <div class="prd-action">
-                                                            <div class="prd-action-left">
+                                                            <h2 class="prd-title"><a href="#product"><?= $fetch_obj->title ?></a>
+                                                            </h2>
+                                                            <div class="prd-description">
+                                                                <?= $fetch_obj->description ?>
+                                                            </div>
+                                                            <div class="prd-action">
                                                                 <form action="#">
+                                                                    <!-- Pick Color<input type="color" name="" id=""> -->
                                                                     <button btnId="<?= $fetch_obj->id ?>" btnPrice="<?= $fetch_obj->price ?>" class="btn js-prd-addtocart addToCart" data-product='{"name": "<?= $fetch_obj->title ?>", "path":"../assets/files/<?= $fetch_obj->img_name ?>", "url":"cart", "aspect_ratio":0.778}'>Add
                                                                         To Cart</button>
                                                                 </form>
                                                             </div>
                                                         </div>
+                                                        <div class="prd-hovers">
+                                                            <div class="prd-price">
+                                                                <div class="price-new">₦ <?= number_format($fetch_obj->price) ?></div>
+                                                            </div>
+                                                            <div class="prd-action">
+                                                                <div class="prd-action-left">
+                                                                    <form action="#">
+                                                                        <button btnId="<?= $fetch_obj->id ?>" btnPrice="<?= $fetch_obj->price ?>" class="btn js-prd-addtocart addToCart" data-product='{"name": "<?= $fetch_obj->title ?>", "path":"../assets/files/<?= $fetch_obj->img_name ?>", "url":"cart", "aspect_ratio":0.778}'>Add
+                                                                            To Cart</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    <?php $sn++;
-                                    } ?>
+                                        <?php $sn++;
+                                        } ?>
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -243,10 +196,11 @@ $app->safesession();
         <div class="footer-bottom footer-bottom--bg">
             <div class="container">
                 <div class="footer-copyright text-center">
-                        <p>©
-                            <script>document.write(new Date().getFullYear())</script> <?=$app->app_title?>. Crafted with <i
-                                class="icon-heart text-danger"></i> by <a target="_blank"  href="https://nestuge.com">Nestuge</a>
-                        </p>
+                    <p>©
+                        <script>
+                            document.write(new Date().getFullYear())
+                        </script> <?= $app->app_title ?>. Crafted with <i class="icon-heart text-danger"></i> by <a target="_blank" href="https://nestuge.com">Nestuge</a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -404,7 +358,7 @@ $app->safesession();
     <script src="../vendors/sweetalert2/sweetalert2.all.min.js"></script>
     <script src="../vendors/toaster/toastr.min.js"></script>
     <script src="js/app-html.js"></script>
-    <script src="../static/js/functions.js?<?=time()?>"></script>
+    <script src="../static/js/functions.js?<?= time() ?>"></script>
 </body>
 
 </html>
