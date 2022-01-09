@@ -54,12 +54,12 @@
                     </a>
                 </li>
 
-                <!-- <li>
-                    <a href="manage_students">
+                <li>
+                    <a href="orders">
                         <i class="fas fa-users"></i>
-                        <span>Manage Students</span>
+                        <span>Orders</span>
                     </a>
-                </li> -->
+                </li>
 
                 <li>
                     <a href="my_profile">

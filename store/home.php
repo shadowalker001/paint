@@ -359,6 +359,16 @@ $app->safesession();
     <script src="../vendors/toaster/toastr.min.js"></script>
     <script src="js/app-html.js"></script>
     <script src="../static/js/functions.js?<?= time() ?>"></script>
+    <?php
+        if(isset($_SESSION['PAY_ERROR'])){
+            $app->sweetAlert('warning', 'We can not process your payment!');
+            unset($_SESSION['PAY_ERROR']);
+        }
+        if(isset($_SESSION['PAY_SUCCESS'])){
+            $app->sweetAlert('success', 'Transaction successful, your product is ready for shipment!');
+            unset($_SESSION['PAY_SUCCESS']);
+        }
+    ?>
 </body>
 
 </html>

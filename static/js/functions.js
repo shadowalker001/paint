@@ -336,6 +336,7 @@ $(document).ready(function () {
             v2 = v1.replace("₦", "").replace(",", "");
             v3= parseInt(v2)-parseInt(price);
             $('.cartSumPrice').html('₦' +Number(v3).toLocaleString('en'));
+            $('#totalCartSum').val(v3);
         }
         return false;
     });
@@ -352,6 +353,7 @@ $(document).ready(function () {
         v2 = v1.replace("₦", "").replace(",", "");
         v3= parseInt(v2)+parseInt(price);
         $('.cartSumPrice').html('₦' +Number(v3).toLocaleString('en'));
+        $('#totalCartSum').val(v3);
         return false;
     });
 
@@ -384,9 +386,9 @@ $(document).ready(function () {
         $('#smtBtn').attr('disabled', 'disabled');
         $('#smtBtn').html('<center>Processing... <div class="spinner-border spinner-border-sm" role="status"></div></center>');
         values = $('#checkoutForm :input').serializeArray();
-        // $.post(path + 'inc.files/process_script?mode=checkoutForm', values, function (data) {
-        //     $('#formSpan').html(data);
-        // });
+        $.post(path + 'inc.files/process_script?mode=checkoutForm', values, function (data) {
+            $('#formSpan').html(data);
+        });
         return false;
     });
 
@@ -824,6 +826,28 @@ $(document).ready(function () {
         btnId = $(this).attr('btnId');
         byepass = 'reklawodahs';
         $.post(path + 'inc.files/process_script?mode=deactivateProduct', { btnId: btnId, byepass: byepass }, function (data) {
+            $('#formSpan').html(data);
+        });
+        return false;
+    });
+
+    /* ctr activate project sending function */
+    jQuery(document).on('click', '.activateOrder', function (e) {
+        e.preventDefault();
+        btnId = $(this).attr('btnId');
+        byepass = 'reklawodahs';
+        $.post(path + 'inc.files/process_script?mode=activateOrder', { btnId: btnId, byepass: byepass }, function (data) {
+            $('#formSpan').html(data);
+        });
+        return false;
+    });
+
+    /* ctr deactivate project sending function */
+    jQuery(document).on('click', '.deactivateOrder', function (e) {
+        e.preventDefault();
+        btnId = $(this).attr('btnId');
+        byepass = 'reklawodahs';
+        $.post(path + 'inc.files/process_script?mode=deactivateOrder', { btnId: btnId, byepass: byepass }, function (data) {
             $('#formSpan').html(data);
         });
         return false;

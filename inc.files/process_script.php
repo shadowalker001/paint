@@ -1,19 +1,28 @@
 <?php
+// Prevent direct access to this class
+// define("BASEPATH", 1);
+
 require('../classes/PdoDB.php');
 require('../classes/App.php');
 // Import PHPMailer classes into the global namespace
 // These must be at the top of your script, not inside a function
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
+// use PHPMailer\PHPMailer\PHPMailer;
+// use PHPMailer\PHPMailer\SMTP;
+// use PHPMailer\PHPMailer\Exception;
 
-require '../vendors/PHPMailer/src/Exception.php';
-require '../vendors/PHPMailer/src/PHPMailer.php';
-require '../vendors/PHPMailer/src/SMTP.php';
+// require '../vendors/PHPMailer/src/Exception.php';
+// require '../vendors/PHPMailer/src/PHPMailer.php';
+// require '../vendors/PHPMailer/src/SMTP.php';
 
 // Encryption files
 require '../classes/Aes.php';     // AES PHP implementation
 require '../classes/AesCtr.php';  // AES Counter Mode implementation
+
+// include('../vendors/flutterwave/library/rave.php');
+// include('../vendors/flutterwave/library/raveEventHandlerInterface.php');
+
+// use Flutterwave\Rave;
+// use Flutterwave\EventHandlerInterface;
 
 $app = new App();
 $app->safesession();
@@ -167,6 +176,72 @@ if (isset($_GET['mode'])) {
             $app->sweetAlert('warning', 'Something went wrong, try again later!');
             print "<script type=\"text/javascript\">
                     $('#user$btnId').html('<i class=\"fas fa-key\"></i> Deactivate');
+                </script>";
+            exit();
+        }
+    } else if ($mode == "activateOrders") {
+        if (!empty($btnId) && is_numeric($btnId) && strrev($byepass) == "shadowalker") {
+            $db_handle = $dbh->prepare("UPDATE pt_transactions SET status=1 WHERE id='$btnId'");
+            if ($db_handle->execute()) {
+                print "<script type=\"text/javascript\">
+                        //$(':button').removeAttr('disabled');
+                    </script>";
+                $app->toaster('success', 'Order Delivered Successfully!');
+                print "<script type=\"text/javascript\">
+                            $('#user$btnId').addClass('deactivateOrder');
+                            $('#user$btnId').removeClass('activateOrder');
+                            $('#user$btnId').html('<i class=\"fas fa-key\"></i> Not Delivered');
+                            $('#user$btnId').addClass('btn-warning');
+                            $('#user$btnId').removeClass('btn-success');
+                            $('#userSpan$btnId').addClass('btn-success');
+                            $('#userSpan$btnId').removeClass('btn-warning');
+                            $('#userSpan$btnId').html('Delivered');
+                        </script>";
+                exit();
+            } else {
+                print "<script type=\"text/javascript\">
+                        $('#user$btnId').html('<i class=\"fas fa-key\"></i> Delivered');
+                    </script>";
+                $app->sweetAlert('warning', 'Unable to process, try again later!');
+                exit();
+            }
+        } else {
+            $app->sweetAlert('warning', 'Something went wrong, try again later!');
+            print "<script type=\"text/javascript\">
+                    $('#user$btnId').html('<i class=\"fas fa-key\"></i> Delivered');
+                </script>";
+            exit();
+        }
+    } else if ($mode == "deactivateOrder") {
+        if (!empty($btnId) && is_numeric($btnId) && strrev($byepass) == "shadowalker") {
+            $db_handle = $dbh->prepare("UPDATE pt_transactions SET status=0 WHERE id='$btnId'");
+            if ($db_handle->execute()) {
+                print "<script type=\"text/javascript\">
+                        //$(':button').removeAttr('disabled');
+                    </script>";
+                $app->toaster('success', 'Order Not Delivered!');
+                print "<script type=\"text/javascript\">
+                            $('#user$btnId').addClass('activateOrder');
+                            $('#user$btnId').removeClass('deactivateOrder');
+                            $('#user$btnId').html('<i class=\"fas fa-key\"></i> Delivered');
+                            $('#user$btnId').addClass('btn-success');
+                            $('#user$btnId').removeClass('btn-warning');
+                            $('#userSpan$btnId').addClass('btn-warning');
+                            $('#userSpan$btnId').removeClass('btn-success');
+                            $('#userSpan$btnId').html('Not Delivered');
+                        </script>";
+                exit();
+            } else {
+                print "<script type=\"text/javascript\">
+                        $('#user$btnId').html('<i class=\"fas fa-key\"></i> Not Delivered');
+                    </script>";
+                $app->sweetAlert('warning', 'Unable to process, try again later!');
+                exit();
+            }
+        } else {
+            $app->sweetAlert('warning', 'Something went wrong, try again later!');
+            print "<script type=\"text/javascript\">
+                    $('#user$btnId').html('<i class=\"fas fa-key\"></i> Not Delivered');
                 </script>";
             exit();
         }
@@ -388,7 +463,7 @@ if (isset($_GET['mode'])) {
                 print '<script type="text/javascript"> 
                     $(\'.cartItems\').html(\'' . count($cart["btnId"]) . '\');
                     $(\'.cartSumPrice\').html(\'₦' . number_format(array_sum($cart["btnPrice"])) . '\');
-                    $("#cartIds").val("'.str_replace('"', "'", json_encode($cart['btnId'])).'");
+                    $("#cartIds").val("' . str_replace('"', "'", json_encode($cart['btnId'])) . '");
                 </script>';
                 print "<script type='text/javascript'>toastr.success(\"Added to cart!\")</script>";
             } else {
@@ -449,19 +524,19 @@ if (isset($_GET['mode'])) {
                 print '<script type="text/javascript"> setTimeout(() => { self.location = "' . $app->server_root_dir("admin/dashboard/edit_product?btnId=$btnIdEnc") . '"; }, 1000); </script>';
             }
         }
-    } else if ($mode == "removeQty"){
+    } else if ($mode == "removeQty") {
         if (isset($_SESSION["cart"])) {
             $cart = $_SESSION["cart"];
-            for ($i=0; $i < count($cart['btnId']); $i++) { 
+            for ($i = 0; $i < count($cart['btnId']); $i++) {
                 # code...
-                if($cart['btnId'][$i]==$btnId){
+                if ($cart['btnId'][$i] == $btnId) {
                     unset($cart['btnId'][$i]);
                     unset($cart['btnPrice'][$i]);
                 }
             }
-            if(count($cart['btnId'])==0){
+            if (count($cart['btnId']) == 0) {
                 unset($_SESSION["cart"]);
-            }else{
+            } else {
                 $cart['btnId'] = array_values($cart['btnId']);
                 $cart['btnPrice'] = array_values($cart['btnPrice']);
                 $_SESSION["cart"] = $cart;
@@ -470,9 +545,127 @@ if (isset($_GET['mode'])) {
             $(\'.cartSumPrice\').html(\'₦' . number_format(array_sum($cart["btnPrice"])) . '\');
             setTimeout(() => { self.location = "' . $app->server_root_dir("store/cart") . '"; }, 1000); </script>';
         }
-    } else if($mode == "clearAll"){
+    } else if ($mode == "clearAll") {
         unset($_SESSION["cart"]);
         print '<script type="text/javascript">
         setTimeout(() => { self.location = "' . $app->server_root_dir("store/home") . '"; }, 1000); </script>';
+    } else if ($mode == "checkoutForm") {
+        // print_r($_POST);die;
+        //Array ( 
+        //     [qtyVal5] => 1 
+        //     [qtyVal4] => 1 
+        //     [colorId4] => 1 
+        //     [name] => Akubue Augustus 
+        //     [email] => akubueaugustuskc@gmail.com 
+        //     [phone] => 08081301064 [state] => Enugu 
+        //     [address] => NO 1, AMOKE LANE, NSUKKA, ENUGU STATE, NIGERIA 
+        //     [totalCartSum] => 95000 
+        // );
+        // $_SESSION['last_post'] = $_POST;
+        // if (isset($_SESSION["cart"])) {
+        //     $cart = $_SESSION["cart"];
+        //     $cartId = time();
+        //     for ($i=0; $i < count($cart['btnId']); $i++) { 
+        //         # code...
+        //         // $cart['btnId'][$i]
+
+        //     }
+        // }
+
+        $amount = $_POST['totalCartSum'];
+        $name = $_POST['name'];
+
+        //* Prepare our rave request
+        $request = [
+            'tx_ref' => time(),
+            'amount' => $amount,
+            'currency' => 'NGN',
+            'payment_options' => 'card',
+            'redirect_url' => 'http://localhost/store/inc.files/process',
+            'customer' => [
+                'email' => $email,
+                'phonenumber' => $phone,
+                'name' => $name
+            ],
+            'meta' => [
+                'price' => $amount
+            ],
+            'customizations' => [
+                'title' => "$app->app_title Product Checkout",
+                'description' => 'secure payments for selected products'
+            ]
+        ];
+
+        //* Ca;; f;iterwave emdpoint
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.flutterwave.com/v3/payments',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => json_encode($request),
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer FLWSECK_TEST-aa24859371a164f13b3383779b951819-X',
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        $res = json_decode($response);
+        if ($res->status == 'success') {
+            $link = $res->data->link;
+            header('Location: ' . $link);
+        } else {
+            $app->sweetAlert('warning', 'We can not process your payment!');
+            $app->buttonController('#smtBtn', 'enable');
+            print '<script type="text/javascript">$(\'#smtBtn\').html(\'<span>Checkout</span>\');</script>';
+            exit;
+        }
+        // $URL = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        // $getData = $_GET;
+        // $postData = $_POST;
+        // $publicKey = $_SERVER['PUBLIC_KEY'];
+        // $secretKey = $_SERVER['SECRET_KEY'];
+        // $success_url = $postData['successurl'];
+        // $failure_url = $postData['failureurl'];
+        // $env = $_SERVER['ENV'];
+
+        // if ($postData['amount']) {
+        //     $_SESSION['publicKey'] = $publicKey;
+        //     $_SESSION['secretKey'] = $secretKey;
+        //     $_SESSION['env'] = $env;
+        //     $_SESSION['successurl'] = $success_url;
+        //     $_SESSION['failureurl'] = $failure_url;
+        //     $_SESSION['currency'] = $postData['currency'];
+        //     $_SESSION['amount'] = $postData['amount'];
+        // }
+
+        // $prefix = 'RV'; // Change this to the name of your business or app
+        // $overrideRef = false;
+
+        // // Uncomment here to enforce the useage of your own ref else a ref will be generated for you automatically
+        // if ($postData['ref']) {
+        //     $prefix = $postData['ref'];
+        //     $overrideRef = true;
+        // }
+
+        // $payment = new Rave($_SESSION['secretKey'], $prefix, $overrideRef);
+
+        // function getURL($url, $data = array())
+        // {
+        //     $urlArr = explode('?', $url);
+        //     $params = array_merge($_GET, $data);
+        //     $new_query_string = http_build_query($params) . '&' . $urlArr[1];
+        //     $newUrl = $urlArr[0] . '?' . $new_query_string;
+        //     return $newUrl;
+        // };
     }
 }

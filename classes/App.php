@@ -21,6 +21,11 @@ class App
     public $audienceServerLink = 'www.paint.com';
     public $jwt_key = 'iAmShadow!?!?!?!';
 
+    public $fw_live_pKey = "FLWPUBK-9df55679205b875d7da47ed8010a2cff-X";
+    public $fw_live_sKey = "FLWSECK-b4cad4ac273760505a74feff6a4d9e6b-X";
+    public $fw_test_pKey = "FLWPUBK_TEST-c2132227851e21d2f9f0bbd66701229b-X";
+    public $fw_test_sKey = "FLWSECK_TEST-aa24859371a164f13b3383779b951819-X";
+
     public function __construct()
     {
         if (substr($_SERVER['REQUEST_URI'], -4) == '.php' or stripos($_SERVER['REQUEST_URI'], '.php') == true) {

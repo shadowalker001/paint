@@ -18,7 +18,7 @@ if (!isset($_SESSION['tappAdminId'])) {
 <head>
 
     <meta charset="utf-8" />
-    <title>Admin Manage Projects | <?= $app->app_title ?></title>
+    <title>Admin Manage Products | <?= $app->app_title ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
