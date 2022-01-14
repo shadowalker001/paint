@@ -139,9 +139,9 @@ if (!isset($_SESSION['tappAdminId'])) {
                                                             </td>
                                                             <td><?php echo number_format($paramGetFields->qty); ?></td>
                                                             <td>₦<?php echo number_format($paramGetFields->qty_price); ?></td>
-                                                            <td><span style="width: 100%;" id="userSpan<?= $paramGetFields->id ?>" class="btn btn-sm btn-<?= ($paramGetFields->status == '0') ?  'warning' : 'success'; ?>"><?= ($paramGetFields->status == '0') ? 'Not Delivered' :  'Delivered'; ?></span></td>
+                                                            <td><span style="width: 100%;" id="userSpan<?= $paramGetFields->id ?>" class="btn btn-sm btn-<?= ($paramGetFields->delivered == '0') ?  'warning' : 'success'; ?>"><?= ($paramGetFields->delivered == '0') ? 'Not Delivered' :  'Delivered'; ?></span></td>
                                                             <td>
-                                                                <a style="width: 100%;" btnId='<?= $paramGetFields->id ?>' id="user<?= $paramGetFields->id ?>" href="#" class="btn btn-<?= ($paramGetFields->status == '0') ?  'success activateOrder' : 'warning deactivateOrder'; ?>"><i class="fas fa-key"></i> <?= ($paramGetFields->status == '0') ?  'Delivered' : 'Not Delivered'; ?></a>
+                                                                <a style="width: 100%;" btnId='<?= $paramGetFields->id ?>' id="user<?= $paramGetFields->id ?>" href="#" class="btn btn-<?= ($paramGetFields->delivered == '0') ?  'success activateOrder' : 'warning deactivateOrder'; ?>"><i class="fas fa-key"></i> <?= ($paramGetFields->delivered == '0') ?  'Delivered' : 'Not Delivered'; ?></a>
                                                             </td>
                                                         </tr>
                                                     <?php

@@ -179,9 +179,9 @@ if (isset($_GET['mode'])) {
                 </script>";
             exit();
         }
-    } else if ($mode == "activateOrders") {
+    } else if ($mode == "activateOrder") {
         if (!empty($btnId) && is_numeric($btnId) && strrev($byepass) == "shadowalker") {
-            $db_handle = $dbh->prepare("UPDATE pt_transactions SET status=1 WHERE id='$btnId'");
+            $db_handle = $dbh->prepare("UPDATE pt_transactions SET delivered=1 WHERE id='$btnId'");
             if ($db_handle->execute()) {
                 print "<script type=\"text/javascript\">
                         //$(':button').removeAttr('disabled');
@@ -214,7 +214,7 @@ if (isset($_GET['mode'])) {
         }
     } else if ($mode == "deactivateOrder") {
         if (!empty($btnId) && is_numeric($btnId) && strrev($byepass) == "shadowalker") {
-            $db_handle = $dbh->prepare("UPDATE pt_transactions SET status=0 WHERE id='$btnId'");
+            $db_handle = $dbh->prepare("UPDATE pt_transactions SET delivered=0 WHERE id='$btnId'");
             if ($db_handle->execute()) {
                 print "<script type=\"text/javascript\">
                         //$(':button').removeAttr('disabled');
