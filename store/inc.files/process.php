@@ -95,6 +95,7 @@ if (isset($_GET['checkoutForm'])) {
 
             curl_close($curl);
             $res = json_decode($response);
+            // print_r($res);exit;
             $post = $_SESSION['last_post'];
             if ($res->status == 'success' && $res->data->tx_ref == $tx_ref  && $res->data->amount >= $post['totalCartSum']) {
                 // echo $response;die;

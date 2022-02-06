@@ -76,6 +76,20 @@
                 </li>
 
                 <li>
+                    <a href="add_sliders">
+                        <i class="fas fa-book-medical"></i>
+                        <span>Add Sliders</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="manage_sliders">
+                        <i class="fas fa-address-card"></i>
+                        <span>Manage Sliders</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="javascript:;" class="logOutAdmin">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Sign out</span>

@@ -18,7 +18,7 @@ if (!isset($_SESSION['tappAdminId'])) {
 <head>
 
     <meta charset="utf-8" />
-    <title>Admin Manage Products | <?= $app->app_title ?></title>
+    <title>Admin Manage Sliders | <?= $app->app_title ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -71,12 +71,12 @@ if (!isset($_SESSION['tappAdminId'])) {
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 class="mb-0">Manage Products</h4>
+                                <h4 class="mb-0">Manage Sliders</h4>
 
                                 <div class="page-title-right">
                                     <ol class="breadcrumb m-0">
                                         <li class="breadcrumb-item"><a href="javascript: void(0);"><?= $app->app_title ?></a></li>
-                                        <li class="breadcrumb-item active">Manage Products</li>
+                                        <li class="breadcrumb-item active">Manage Sliders</li>
                                     </ol>
                                 </div>
 
@@ -88,7 +88,7 @@ if (!isset($_SESSION['tappAdminId'])) {
                         <div class="col-sm-12">
                             <div class="card mt-5">
                                 <?php
-                                $querySQL = "SELECT * FROM pt_products ORDER BY id DESC";
+                                $querySQL = "SELECT * FROM pt_sliders ORDER BY id DESC";
                                 $db_handle = $dbh->prepare($querySQL);
                                 $db_handle->execute();
                                 $counter = 1;
@@ -102,9 +102,7 @@ if (!isset($_SESSION['tappAdminId'])) {
                                                     <tr style="cursor: pointer;">
                                                         <th>ID</th>
                                                         <th>Title</th>
-                                                        <th>Description</th>
-                                                        <th>Color(s)</th>
-                                                        <th>Price</th>
+                                                        <th>Subtitle</th>
                                                         <th>Picture</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
@@ -120,32 +118,14 @@ if (!isset($_SESSION['tappAdminId'])) {
                                                         <tr data-id="<?= $counter ?>" style="cursor: pointer;">
                                                             <td><?= $counter ?></td>
                                                             <td><?php echo $paramGetFields->title; ?></td>
-                                                            <td><?php echo $paramGetFields->description; ?></td>
-                                                            <td>
-                                                                <?php
-                                                                $color = $paramGetFields->color;
-                                                                if ($color != "") {
-                                                                    echo '<select class="form-control"  style="width: auto;">';
-                                                                    echo '<option value=""> &#8964 </option>';
-                                                                    $color = json_decode($color);
-                                                                    for ($i = 0; $i < count($color); $i++) {
-                                                                        # code...
-                                                                        echo '<option disabled style="background-color:' . $color[$i]->color . '" value="">' . $color[$i]->name . ' (' . $color[$i]->color . ')</option>';
-                                                                    }
-                                                                    echo '</select>';
-                                                                } else {
-                                                                    echo '-';
-                                                                }
-                                                                ?>
-                                                            </td>
-                                                            <td>₦<?php echo number_format($paramGetFields->price); ?></td>
-                                                            <td><img src="../../assets/files/<?php echo $paramGetFields->img_name; ?>" alt="IMG" height="50" width="50"></td>
+                                                            <td><?php echo $paramGetFields->subtitle; ?></td>
+                                                            <td><a href="../../assets/files/<?php echo $paramGetFields->img_name; ?>" target="_blank" rel="noopener noreferrer"><img src="../../assets/files/<?php echo $paramGetFields->img_name; ?>" alt="IMG" height="50"></a></td>
                                                             <td><span style="width: 100%;" id="userSpan<?= $paramGetFields->id ?>" class="btn btn-sm btn-<?= ($paramGetFields->status == '0') ?  'warning' : 'success'; ?>"><?= ($paramGetFields->status == '0') ? 'Inactive' :  'Active'; ?></span></td>
                                                             <td>
-                                                                <a style="width: 100%;" btnId='<?= $paramGetFields->id ?>' id="user<?= $paramGetFields->id ?>" href="#" class="btn btn-<?= ($paramGetFields->status == '0') ?  'success activateProduct' : 'warning deactivateProduct'; ?>"><i class="fas fa-key"></i> <?= ($paramGetFields->status == '0') ?  'Activate' : 'Deactivate'; ?></a>
+                                                                <a style="width: 100%;" btnId='<?= $paramGetFields->id ?>' id="user<?= $paramGetFields->id ?>" href="#" class="btn btn-<?= ($paramGetFields->status == '0') ?  'success activateSlider' : 'warning deactivateSlider'; ?>"><i class="fas fa-key"></i> <?= ($paramGetFields->status == '0') ?  'Activate' : 'Deactivate'; ?></a>
                                                             </td>
                                                             <td>
-                                                                <a style="width: 100%;" btnId='<?= $btnId ?>' href="#" class="btn btn-outline-info editProduct"><i class="fas fa-edit"></i> Edit</a>
+                                                                <a style="width: 100%;" btnId='<?= $btnId ?>' href="#" class="btn btn-outline-info editSlider"><i class="fas fa-edit"></i> Edit</a>
                                                             </td>
                                                         </tr>
                                                     <?php

@@ -179,6 +179,72 @@ if (isset($_GET['mode'])) {
                 </script>";
             exit();
         }
+    } else if ($mode == "activateSlider") {
+        if (!empty($btnId) && is_numeric($btnId) && strrev($byepass) == "shadowalker") {
+            $db_handle = $dbh->prepare("UPDATE pt_sliders SET status=1 WHERE id='$btnId'");
+            if ($db_handle->execute()) {
+                print "<script type=\"text/javascript\">
+                        //$(':button').removeAttr('disabled');
+                    </script>";
+                $app->toaster('success', 'Slider Activated Successfully!');
+                print "<script type=\"text/javascript\">
+                            $('#user$btnId').addClass('deactivateSlider');
+                            $('#user$btnId').removeClass('activateSlider');
+                            $('#user$btnId').html('<i class=\"fas fa-key\"></i> Deactivate');
+                            $('#user$btnId').addClass('btn-warning');
+                            $('#user$btnId').removeClass('btn-success');
+                            $('#userSpan$btnId').addClass('btn-success');
+                            $('#userSpan$btnId').removeClass('btn-warning');
+                            $('#userSpan$btnId').html('Active');
+                        </script>";
+                exit();
+            } else {
+                print "<script type=\"text/javascript\">
+                        $('#user$btnId').html('<i class=\"fas fa-key\"></i> Activate');
+                    </script>";
+                $app->sweetAlert('warning', 'Unable to activate, try again later!');
+                exit();
+            }
+        } else {
+            $app->sweetAlert('warning', 'Something went wrong, try again later!');
+            print "<script type=\"text/javascript\">
+                    $('#user$btnId').html('<i class=\"fas fa-key\"></i> Activate');
+                </script>";
+            exit();
+        }
+    } else if ($mode == "deactivateSlider") {
+        if (!empty($btnId) && is_numeric($btnId) && strrev($byepass) == "shadowalker") {
+            $db_handle = $dbh->prepare("UPDATE pt_sliders SET status=0 WHERE id='$btnId'");
+            if ($db_handle->execute()) {
+                print "<script type=\"text/javascript\">
+                        //$(':button').removeAttr('disabled');
+                    </script>";
+                $app->toaster('success', 'Slider Dectivated Successfully!');
+                print "<script type=\"text/javascript\">
+                            $('#user$btnId').addClass('activateSlider');
+                            $('#user$btnId').removeClass('deactivateSlider');
+                            $('#user$btnId').html('<i class=\"fas fa-key\"></i> Activate');
+                            $('#user$btnId').addClass('btn-success');
+                            $('#user$btnId').removeClass('btn-warning');
+                            $('#userSpan$btnId').addClass('btn-warning');
+                            $('#userSpan$btnId').removeClass('btn-success');
+                            $('#userSpan$btnId').html('Inactive');
+                        </script>";
+                exit();
+            } else {
+                print "<script type=\"text/javascript\">
+                        $('#user$btnId').html('<i class=\"fas fa-key\"></i> Deactivate');
+                    </script>";
+                $app->sweetAlert('warning', 'Unable to deactivate, try again later!');
+                exit();
+            }
+        } else {
+            $app->sweetAlert('warning', 'Something went wrong, try again later!');
+            print "<script type=\"text/javascript\">
+                    $('#user$btnId').html('<i class=\"fas fa-key\"></i> Deactivate');
+                </script>";
+            exit();
+        }
     } else if ($mode == "activateOrder") {
         if (!empty($btnId) && is_numeric($btnId) && strrev($byepass) == "shadowalker") {
             $db_handle = $dbh->prepare("UPDATE pt_transactions SET delivered=1 WHERE id='$btnId'");
@@ -372,6 +438,61 @@ if (isset($_GET['mode'])) {
             $app->buttonController('#smtBtn', 'enable');
             print '<script type="text/javascript">$(\'#createListingForm\').trigger("reset"); $(\'#smtBtn\').html(\'Create Listing <i class="fa fa-sign-in ml-1"></i>\');</script>';
         }
+    } else if ($mode == "addSliderForm") {
+        $title = ucwords($title);
+        $subtitle = ucwords($subtitle);
+        if (empty($title) || empty($subtitle)) {
+            $app->sweetAlert('warning', 'Fields cannot be Empty!');
+            $app->buttonController('#smtBtn', 'enable');
+            print '<script type="text/javascript"> $(\'#smtBtn\').html(\'Add Slider <i class="fas fa-sign-in-alt"></i>\');</script>';
+            die;
+        }
+
+        $errors = 0;
+        $exists = 0;
+        $success = 0;
+        for ($i = 0; $i < count($_FILES); $i++) {
+            # code...
+            $pos = 'file_' . $i;
+            $final_name = str_replace(" ", "", strtolower(trim($_FILES[$pos]['name'])));
+            $final_name = "file_pt_" . time() . "_" . $final_name;
+
+            $location = "../assets/files/$final_name";
+            $loc = $app->server_root_dir("assets/files/$final_name");
+            $explode = explode(".", $_FILES[$pos]['name']);
+            $type = end($explode);
+
+            if (!file_exists($location)) {
+                $fileData = file_get_contents($_FILES[$pos]['tmp_name']);
+                if (file_put_contents($location, $fileData)) {
+                    unlink($_FILES[$pos]['tmp_name']);
+                    try {
+                        $db_handle = $dbh->prepare("INSERT INTO pt_sliders SET title=:title, subtitle=:subtitle, img_name=:img_name, date=NOW()");
+                        if ($db_handle->execute(array(':title' => $title, ':subtitle' => $subtitle, ':img_name' => $final_name))) {
+                            $app->sweetAlert('success', 'Slider added successfully!');
+                            $app->buttonController('#smtBtn', 'enable');
+                            print '<script type="text/javascript">$(\'#addSliderForm\').trigger("reset"); $(\'#smtBtn\').html(\'Add Slider <i class="fa sign-in-alt"></i>\');</script>';
+                            // print "<script>$('.processor').css('display', 'none');</script>";
+                        }
+                    } catch (PDOException $error) {
+                        $app->buttonController('#smtBtn', 'enable');
+                        print '<script type="text/javascript"> $(\'#smtBtn\').html(\'Add Slider <i class="fas fa-sign-in-alt"></i>\');</script>';
+                        die($error->getMessage());
+                    }
+                } else {
+                    // print_r($_FILES[$pos]['tmp_name']);
+                    $errors += 1;
+                }
+            } else {
+                $exists += 1;
+            }
+        }
+
+        if ($errors > 0 || $exists > 0) {
+            $app->sweetAlert('warning', 'Server error, try again later!');
+            $app->buttonController('#smtBtn', 'enable');
+            print '<script type="text/javascript">$(\'#addSliderForm\').trigger("reset"); $(\'#smtBtn\').html(\'Add Slider <i class="fa fa-sign-in ml-1"></i>\');</script>';
+        }
     } else if ($mode == "updateProductForm") {
         $title = ucwords($title);
         $desc = ucwords($desc);
@@ -386,6 +507,79 @@ if (isset($_GET['mode'])) {
             $app->sweetAlert('warning', 'Wrong value for price field!');
             $app->buttonController('#smtBtn', 'enable');
             print '<script type="text/javascript"> $(\'#smtBtn\').html(\'Update Product <i class="fas fa-sign-in-alt"></i>\');</script>';
+            die;
+        }
+
+        $errors = 0;
+        $exists = 0;
+        $success = 0;
+        if (!isset($files)) {
+            for ($i = 0; $i < count($_FILES); $i++) {
+                # code...
+                $pos = 'file_' . $i;
+                $final_name = str_replace(" ", "", strtolower(trim($_FILES[$pos]['name'])));
+                $final_name = "file_pt_" . time() . "_" . $final_name;
+
+                $location = "../assets/files/$final_name";
+                $loc = $app->server_root_dir("assets/files/$final_name");
+                $explode = explode(".", $_FILES[$pos]['name']);
+                $type = end($explode);
+
+                if (!file_exists($location)) {
+                    $fileData = file_get_contents($_FILES[$pos]['tmp_name']);
+                    if (file_put_contents($location, $fileData)) {
+                        $old_img_name = $app->getValue("img_name", "pt_products", "id", $btnId);
+                        unlink($_FILES[$pos]['tmp_name']);
+                        try {
+                            $db_handle = $dbh->prepare("UPDATE pt_products SET title=:title, description=:description, price=:price, rating=:rating, img_name=:img_name WHERE id='$btnId'");
+                            if ($db_handle->execute(array(':title' => $title, ':description' => $desc, ':price' => $price, ':rating' => $rating, ':img_name' => $final_name))) {
+                                unlink("../assets/files/" . $old_img_name);
+                                $app->sweetAlert('success', 'Product updated successfully!');
+                                $app->buttonController('#smtBtn', 'enable');
+                                print '<script type="text/javascript">$(\'#file\').val(""); $(\'#smtBtn\').html(\'Update Product <i class="fa sign-in-alt"></i>\');</script>';
+                                // print "<script>$('.processor').css('display', 'none');</script>";
+                            }
+                        } catch (PDOException $error) {
+                            $app->buttonController('#smtBtn', 'enable');
+                            print '<script type="text/javascript"> $(\'#smtBtn\').html(\'Update Product <i class="fas fa-sign-in-alt"></i>\');</script>';
+                            die($error->getMessage());
+                        }
+                    } else {
+                        // print_r($_FILES[$pos]['tmp_name']);
+                        $errors += 1;
+                    }
+                } else {
+                    $exists += 1;
+                }
+            }
+        } else {
+            try {
+                $db_handle = $dbh->prepare("UPDATE pt_products SET title=:title, description=:description, price=:price, rating=:rating");
+                if ($db_handle->execute(array(':title' => $title, ':description' => $desc, ':price' => $price, ':rating' => $rating))) {
+                    $app->sweetAlert('success', 'Product updated successfully!');
+                    $app->buttonController('#smtBtn', 'enable');
+                    print '<script type="text/javascript">$(\'#smtBtn\').html(\'Update Product <i class="fa sign-in-alt"></i>\');</script>';
+                    // print "<script>$('.processor').css('display', 'none');</script>";
+                }
+            } catch (PDOException $error) {
+                $app->buttonController('#smtBtn', 'enable');
+                print '<script type="text/javascript"> $(\'#smtBtn\').html(\'Update Product <i class="fas fa-sign-in-alt"></i>\');</script>';
+                die($error->getMessage());
+            }
+        }
+
+        if ($errors > 0 || $exists > 0) {
+            $app->sweetAlert('warning', 'Server error, try again later!');
+            $app->buttonController('#smtBtn', 'enable');
+            print '<script type="text/javascript">$(\'#createListingForm\').trigger("reset"); $(\'#smtBtn\').html(\'Create Listing <i class="fa fa-sign-in ml-1"></i>\');</script>';
+        }
+    } else if ($mode == "updateSliderForm") {
+        $title = ucwords($title);
+        $subtitle = ucwords($subtitle);
+        if (empty($title) || empty($subtitle)) {
+            $app->sweetAlert('warning', 'Fields cannot be Empty!');
+            $app->buttonController('#smtBtn', 'enable');
+            print '<script type="text/javascript"> $(\'#smtBtn\').html(\'Update Slider <i class="fas fa-sign-in-alt"></i>\');</script>';
             die;
         }
 
