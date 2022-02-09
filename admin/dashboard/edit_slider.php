@@ -90,7 +90,7 @@ if (!isset($_SESSION['tappAdminId'])) {
                         print '<script type="text/javascript"> self.location = "' . $app->server_root_dir('admin/dashboard/manage_Sliders') . '" </script>';
                     }
 
-                    $db_handle = $dbh->prepare("SELECT * FROM pt_sliers WHERE id=:id LIMIT 1");
+                    $db_handle = $dbh->prepare("SELECT * FROM pt_sliders WHERE id=:id LIMIT 1");
                     $db_handle->execute(array(':id' => $btnId));
                     $sn = 1;
                     if ($db_handle->rowCount() > 0) {
@@ -108,13 +108,13 @@ if (!isset($_SESSION['tappAdminId'])) {
                                                     <div class="col-sm-12">
                                                         <div class="form-group mb-3">
                                                             <label for="">Slider Title</label>
-                                                            <input type="text" name="title" id="title" value="<?php echo $fetch_obj->title ?>" class="form-control" placeholder="slider title" required>
+                                                            <input type="text" name="title" id="title" value="<?php echo $fetch_obj->title ?>" class="form-control" placeholder="slider title" maxlength="50" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-12">
                                                         <div class="form-group mb-3">
                                                             <label for=""> Sldier Subtitle</label><br>
-                                                            <input type="text" name="subtitle" id="subtitle" value="<?php echo $fetch_obj->subtitle ?>" class="form-control" placeholder="slider subtitle" required>
+                                                            <input type="text" name="subtitle" id="subtitle" value="<?php echo $fetch_obj->subtitle ?>" class="form-control" placeholder="slider subtitle" maxlength="100" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-12">
@@ -135,7 +135,7 @@ if (!isset($_SESSION['tappAdminId'])) {
                                                         <div class="form-group mb-3">
                                                             <input type="hidden" id="btnId" name="btnId" value="<?= $btnId ?>">
                                                             <input type="hidden" name="byepass" id="byepass" value="egutsen">
-                                                            <button id="smtBtn" type="submit" name="submit" class="btn btn-outline-primary" style="width: 100%;">Add Slider <i class="fas fa-sign-in-alt"></i></button>
+                                                            <button id="smtBtn" type="submit" name="submit" class="btn btn-outline-primary" style="width: 100%;">Update Slider <i class="fas fa-sign-in-alt"></i></button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -143,75 +143,6 @@ if (!isset($_SESSION['tappAdminId'])) {
                                         </div>
                                     </div>
                                 </div> <!-- end col-->
-                                <div class="col-sm-8 col-sm-8 offset-2">
-                                    <div class="card card-default mt-5">
-                                        <div class="card-header">
-                                            <h4 class="card-title">Add Slider Color(s)</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <form method="POST" id="addColorForm" action="" autocomplete="off">
-                                                <center><span class="formSpanAddColor text-danger" id="formSpanAddColor"></span>
-                                                </center>
-                                                <div class="form-group mb-3">
-                                                    <label for="">Choose Color</label>
-                                                    <input name="ccolor" id="ccolor" type="color" class="form-control" required>
-                                                </div>
-                                                <div class="form-group mb-3">
-                                                    <label for="">Color Name</label>
-                                                    <input name="cname" id="cname" type="text" class="form-control" placeholder="Enter color name" required>
-                                                </div>
-
-                                                <div class="form-group mb-3">
-                                                    <input type="hidden" id="btnId" name="btnId" value="<?= $btnId ?>">
-                                                    <input type="hidden" name="byepass" id="byepass" value="egutsen">
-                                                    <button id="smtBtnColor" type="submit" name="submit" class="btn btn-outline-primary" style="width: 100%;">Add <i class="fas fa-plus"></i></button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <style>
-                                    option:hover {
-                                        background-color: transparent !important;
-                                    }
-                                </style>
-                                <div class="col-sm-8 col-sm-8 offset-2">
-                                    <div class="card card-default mt-5">
-                                        <div class="card-header">
-                                            <h4 class="card-title">Remove Slider Color(s)</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <form method="POST" id="removeColorForm" action="" autocomplete="off">
-                                                <center><span class="formSpanRemoveColor text-danger" id="formSpanRemoveColor"></span>
-                                                </center>
-                                                <div class="form-group mb-3">
-                                                    <!-- <label for="">Choose Color</label> -->
-                                                    <select name="colorId" id="colorId" class="form-control" required>
-                                                        <?php
-                                                        $color = $fetch_obj->color;
-                                                        if ($color != "") {
-                                                            echo '<option value="">Choose Color</option>';
-                                                            $color = json_decode($color);
-                                                            for ($i = 0; $i < count($color); $i++) {
-                                                                # code...
-                                                                echo '<option color="' . $color[$i]->color . '" style="background-color:' . $color[$i]->color . '" value="' . ($i + 1) . '">' . $color[$i]->name . ' (' . $color[$i]->color . ')</option>';
-                                                            }
-                                                        } else {
-                                                            echo '<option value="">No color added</option>';
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                </div>
-
-                                                <div class="form-group mb-3">
-                                                    <input type="hidden" id="btnId" name="btnId" value="<?= $btnId ?>">
-                                                    <input type="hidden" name="byepass" id="byepass" value="egutsen">
-                                                    <button id="smtBtnColorRemove" type="submit" name="submit" class="btn btn-outline-primary" style="width: 100%;">Remove <i class="fas fa-minus"></i></button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
                             </div> <!-- end row-->
 
                     <?php }

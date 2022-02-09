@@ -13,7 +13,7 @@ if (!isset($_SESSION['tappAdminId'])) {
 <head>
 
     <meta charset="utf-8" />
-    <title>Admin Add Sliders | <?= $app->app_title ?></title>
+    <title>Admin Add Category | <?= $app->app_title ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -65,12 +65,12 @@ if (!isset($_SESSION['tappAdminId'])) {
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 class="mb-0">Add Sliders</h4>
+                                <h4 class="mb-0">Add Category</h4>
 
                                 <div class="page-title-right">
                                     <ol class="breadcrumb m-0">
                                         <li class="breadcrumb-item"><a href="javascript: void(0);"><?= $app->app_title ?></a></li>
-                                        <li class="breadcrumb-item active">Add Sliders</li>
+                                        <li class="breadcrumb-item active">Add Category</li>
                                     </ol>
                                 </div>
 
@@ -82,26 +82,25 @@ if (!isset($_SESSION['tappAdminId'])) {
                         <div class="col-sm-8 offset-2">
                             <div class="card mt-5">
                                 <div class="card-body">
-                                    <form method="POST" id="addSliderForm" action="" autocomplete="off">
+                                    <form method="POST" id="addCategoryForm" action="" autocomplete="off">
                                         <center><span class="formSpan text-danger" id="formSpan"></span>
                                         </center>
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <div class="form-group mb-3">
-                                                    <label for="">Sliders Title</label>
-                                                    <input type="text" name="title" id="title" class="form-control" placeholder="slider title" maxlength="50" required>
+                                                    <label for="">Choose Category</label>
+                                                    <select name="category" id="category" class="form-control">
+                                                        <option value="" disabled>Choose Category</option>
+                                                        <option value="Residential Interior">Residential Interior</option>
+                                                        <option value="Commercial Interior">Commercial Interior</option>
+                                                        <option value="Industrial Interior">Industrial Interior</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12">
                                                 <div class="form-group mb-3">
-                                                    <label for="">Sliders Subtitle</label>
-                                                    <input type="text" name="subtitle" id="subtitle" class="form-control" placeholder="slider subtitle" maxlength="100" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <div class="form-group mb-3">
-                                                    <label for="">Slider Picture</label>
-                                                    <input type="file" name="file" id="file" class="form-control" accept="image/*" required>
+                                                    <label for="">Category Pictures <i style="color:red">*add new category picture(s)</i> </label>
+                                                    <input type="file" name="file" id="file" class="form-control" accept="image/*" multiple required>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 mb-3">
@@ -115,7 +114,7 @@ if (!isset($_SESSION['tappAdminId'])) {
                                             <div class="col-sm-12">
                                                 <div class="form-group mb-3">
                                                     <input type="hidden" name="byepass" id="byepass" value="egutsen">
-                                                    <button id="smtBtn" type="submit" name="submit" class="btn btn-outline-primary" style="width: 100%;">Add Slider <i class="fas fa-sign-in-alt"></i></button>
+                                                    <button id="smtBtn" type="submit" name="submit" class="btn btn-outline-primary" style="width: 100%;">Add <i class="fas fa-sign-in-alt"></i></button>
                                                 </div>
                                             </div>
                                         </div>

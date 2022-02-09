@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 14, 2022 at 02:45 AM
+-- Generation Time: Feb 10, 2022 at 12:47 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.2
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `paint`
 --
-CREATE DATABASE IF NOT EXISTS `paint` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `paint`;
 
 -- --------------------------------------------------------
 
@@ -46,6 +44,20 @@ CREATE TABLE `pt_admin` (
 
 INSERT INTO `pt_admin` (`id`, `fname`, `email`, `phone`, `password`, `picture`, `status`, `date`) VALUES
 (1, 'Akubue Administrator', 'akubueaugustuskc@gmail.com', '08081301066', '$2y$11$wQc4O5veGv/Ktohq5rSThe3BX8puStw/evZ8rl5ShNtha806ooxF.', 'img_pt_02994193e9.jpg', 1, '2021-02-18 01:27:51');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pt_categories`
+--
+
+CREATE TABLE `pt_categories` (
+  `id` int(11) NOT NULL,
+  `category` varchar(100) NOT NULL,
+  `img_name` varchar(100) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -76,6 +88,21 @@ CREATE TABLE `pt_products` (
   `rating` int(11) NOT NULL,
   `img_name` varchar(100) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
+  `date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pt_sliders`
+--
+
+CREATE TABLE `pt_sliders` (
+  `id` int(11) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `subtitle` varchar(535) NOT NULL,
+  `img_name` varchar(100) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
   `date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -115,6 +142,12 @@ ALTER TABLE `pt_admin`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `pt_categories`
+--
+ALTER TABLE `pt_categories`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `pt_contact`
 --
 ALTER TABLE `pt_contact`
@@ -124,6 +157,12 @@ ALTER TABLE `pt_contact`
 -- Indexes for table `pt_products`
 --
 ALTER TABLE `pt_products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `pt_sliders`
+--
+ALTER TABLE `pt_sliders`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -143,6 +182,12 @@ ALTER TABLE `pt_admin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `pt_categories`
+--
+ALTER TABLE `pt_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `pt_contact`
 --
 ALTER TABLE `pt_contact`
@@ -152,6 +197,12 @@ ALTER TABLE `pt_contact`
 -- AUTO_INCREMENT for table `pt_products`
 --
 ALTER TABLE `pt_products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `pt_sliders`
+--
+ALTER TABLE `pt_sliders`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

@@ -78,7 +78,7 @@
                 <li>
                     <a href="add_sliders">
                         <i class="fas fa-book-medical"></i>
-                        <span>Add Sliders</span>
+                        <span>Add Slider</span>
                     </a>
                 </li>
 
@@ -86,6 +86,20 @@
                     <a href="manage_sliders">
                         <i class="fas fa-address-card"></i>
                         <span>Manage Sliders</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="add_category_picture">
+                        <i class="fas fa-book-medical"></i>
+                        <span>Add Category Picture</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="manage_categories">
+                        <i class="fas fa-address-card"></i>
+                        <span>Manage Categories</span>
                     </a>
                 </li>
 

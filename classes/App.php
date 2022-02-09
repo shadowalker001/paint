@@ -21,6 +21,10 @@ class App
     public $audienceServerLink = 'www.paint.com';
     public $jwt_key = 'iAmShadow!?!?!?!';
 
+    public $residential = 'Sed ut perspiciatis unde omnis iste natus error sit volupt ateaccu';
+    public $commercial = 'Sed ut perspiciatis unde omnis iste natus error sit volupt ateaccu';
+    public $industrial = 'Sed ut perspiciatis unde omnis iste natus error sit volupt ateaccu';
+
     public $fw_live_pKey = "FLWPUBK-9df55679205b875d7da47ed8010a2cff-X";
     public $fw_live_sKey = "FLWSECK-b4cad4ac273760505a74feff6a4d9e6b-X";
     public $fw_test_pKey = "FLWPUBK_TEST-c2132227851e21d2f9f0bbd66701229b-X";
@@ -117,6 +121,29 @@ class App
         global $dbh;
         try {
             $sql = "SELECT * FROM {$table} WHERE {$priKeyField} = :priKeyValue LIMIT 1";
+            $db_handle = $dbh->prepare($sql);
+            $check_exec = $db_handle->execute(array(':priKeyValue' => $priKeyValue));
+            $rows_affected = $db_handle->rowCount();		//count the number of returned rows
+            if ($check_exec == false) {
+                $data = '';
+            } elseif ($rows_affected === 0) {
+                $data = '';
+            } else {
+                $fetch_obj = $db_handle->fetch(PDO::FETCH_OBJ);
+                $data = $fetch_obj->$field;
+            }
+            $db_handle = null;
+            return $data;
+        } catch (PDOException $shadowalkertech) {
+            echo $shadowalkertech->getMessage();
+        }
+    }
+
+    public function getValuePlus(string $field, string $table, string $priKeyField, $priKeyValue, string $whereClause='')
+    {
+        global $dbh;
+        try {
+            $sql = "SELECT * FROM {$table} WHERE {$priKeyField} = :priKeyValue $whereClause LIMIT 1";
             $db_handle = $dbh->prepare($sql);
             $check_exec = $db_handle->execute(array(':priKeyValue' => $priKeyValue));
             $rows_affected = $db_handle->rowCount();		//count the number of returned rows

@@ -9,103 +9,47 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xxl-4 col-xl-4 col-lg-6">
-                <div class="portfolio__item p-relative mb-30">
-                    <div class="portfolio__thumb w-img">
-                        <img src="static/img/portfolio/portfolio-1.jpg" alt="">
+        <?php
+        $querySQL = "SELECT * FROM pt_categories WHERE status=1 ORDER BY RAND() LIMIT 5";
+        $db_handle = $dbh->prepare($querySQL);
+        $db_handle->execute();
+        $counter = 1;
+        if ($db_handle->rowCount() > 0) {
+        ?>
+            <div class="row">
+                <?php
+                while ($paramGetFields = $db_handle->fetch(PDO::FETCH_OBJ)) {
+                ?>
+                    <div class="col-xxl-<?= $counter > 3 ? 6 : 4 ?> col-xl-<?= $counter > 3 ? 6 : 4 ?> col-lg-6">
+                        <div class="portfolio__item p-relative mb-30">
+                            <div class="portfolio__thumb w-img">
+                                <img src="assets/files/<?= $paramGetFields->img_name ?>" alt="">
 
-                        <div class="portfolio__plus transition-3">
-                            <a class="popup-image" href="static/img/portfolio/portfolio-1.jpg">
-                                <i class="far fa-plus"></i>
-                            </a>
+                                <div class="portfolio__plus transition-3">
+                                    <a class="popup-image" href="assets/files/<?= $paramGetFields->img_name ?>">
+                                        <i class="far fa-plus"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="portfolio__content transition-3">
+                                <h3 class="portfolio__title">
+                                    <a href="#portfolio-details.html"><?= $app->app_title ?></a>
+                                </h3>
+                                <p>Quality Painting Services</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="portfolio__content transition-3">
-                        <h3 class="portfolio__title">
-                            <a href="portfolio-details.html">Painting Outside In House</a>
-                        </h3>
-                        <p>Color Painting Services</p>
+                <?php
+                    $counter++;
+                }
+                ?>
+            <?php } else { ?>
+                <div class="card-body">
+                    <div class="alert alert-primary border-0" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true"><i class="fas fa-window-close align-middle font-16"></i></span></button>
+                        <strong>Opps!</strong> No record found!
                     </div>
                 </div>
+            <?php } ?>
             </div>
-            <div class="col-xxl-4 col-xl-4 col-lg-6">
-                <div class="portfolio__item p-relative mb-30">
-                    <div class="portfolio__thumb w-img">
-                        <img src="static/img/portfolio/portfolio-2.jpg" alt="">
-
-                        <div class="portfolio__plus transition-3">
-                            <a class="popup-image" href="static/img/portfolio/portfolio-2.jpg">
-                                <i class="far fa-plus"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="portfolio__content transition-3">
-                        <h3 class="portfolio__title">
-                            <a href="portfolio-details.html">Painting Outside In House</a>
-                        </h3>
-                        <p>Color Painting Services</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-4 col-xl-4 col-lg-6">
-                <div class="portfolio__item p-relative mb-30">
-                    <div class="portfolio__thumb w-img">
-                        <img src="static/img/portfolio/portfolio-3.jpg" alt="">
-
-                        <div class="portfolio__plus transition-3">
-                            <a class="popup-image" href="static/img/portfolio/portfolio-3.jpg">
-                                <i class="far fa-plus"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="portfolio__content transition-3">
-                        <h3 class="portfolio__title">
-                            <a href="portfolio-details.html">Painting Outside In House</a>
-                        </h3>
-                        <p>Color Painting Services</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-6 col-xl-6 col-lg-6">
-                <div class="portfolio__item p-relative mb-30">
-                    <div class="portfolio__thumb w-img">
-                        <img src="static/img/portfolio/portfolio-4.jpg" alt="">
-
-                        <div class="portfolio__plus transition-3">
-                            <a class="popup-image" href="static/img/portfolio/portfolio-4.jpg">
-                                <i class="far fa-plus"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="portfolio__content transition-3">
-                        <h3 class="portfolio__title">
-                            <a href="portfolio-details.html">Painting Outside In House</a>
-                        </h3>
-                        <p>Color Painting Services</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-6 col-xl-6 col-lg-6">
-                <div class="portfolio__item p-relative mb-30">
-                    <div class="portfolio__thumb w-img">
-                        <img src="static/img/portfolio/portfolio-5.jpg" alt="">
-
-                        <div class="portfolio__plus transition-3">
-                            <a class="popup-image" href="static/img/portfolio/portfolio-5.jpg">
-                                <i class="far fa-plus"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="portfolio__content transition-3">
-                        <h3 class="portfolio__title">
-                            <a href="portfolio-details.html">Painting Outside In House</a>
-                        </h3>
-                        <p>Color Painting Services</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </section>
 <!-- portfolio area end -->

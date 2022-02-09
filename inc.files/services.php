@@ -12,9 +12,11 @@
         </div>
         <div class="row">
             <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6">
+                <a href="category?t=residential">
                 <div class="services__item p-relative mb-30">
                     <div class="services__thumb w-img">
-                        <img src="static/img/services/services-1.jpg" alt="">
+                        <?php $img = $app->getValuePlus("img_name", "pt_categories", "category", "Residential Interior", "AND status=1"); ?>
+                        <img src="<?=$img!=''?'assets/files/'.$img:'static/img/services/services-1.jpg'?>" alt="">
                     </div>
                     <div class="services__content text-center">
                         <div class="services__icon">
@@ -23,7 +25,7 @@
                         <h3 class="services__title">
                             <a href="services-details.html">Residential Interior</a>
                         </h3>
-                        <p>Sed ut perspiciatis unde omnis iste natus error sit volupt ateaccu</p>
+                        <p><?=$app->residential?></p>
                         <!-- <a href="services-details.html" class="link-btn-2">
                               read more
                               <i class="far fa-arrow-right"></i>
@@ -31,11 +33,14 @@
                            </a> -->
                     </div>
                 </div>
+                </a>
             </div>
             <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6">
+                <a href="category?t=commercial">
                 <div class="services__item p-relative mb-30">
                     <div class="services__thumb w-img">
-                        <img src="static/img/services/services-2.jpg" alt="">
+                        <?php $img = '';  $app->getValuePlus("img_name", "pt_categories", "category", "Commercial Interior", "AND status=1"); ?>
+                        <img src="<?=$img!=''?'assets/files/'.$img:'static/img/services/services-2.jpg'?>" alt="">
                     </div>
                     <div class="services__content text-center">
                         <div class="services__icon">
@@ -44,7 +49,7 @@
                         <h3 class="services__title">
                             <a href="services-details.html">Commercial Interior</a>
                         </h3>
-                        <p>Sed ut perspiciatis unde omnis iste natus error sit volupt ateaccu</p>
+                        <p><?=$app->commercial?></p>
                         <!-- <a href="services-details.html" class="link-btn-2">
                               read more
                               <i class="far fa-arrow-right"></i>
@@ -52,11 +57,14 @@
                            </a> -->
                     </div>
                 </div>
+            </a>
             </div>
             <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6">
+                <a href="category?t=industrial">
                 <div class="services__item p-relative mb-30">
                     <div class="services__thumb w-img">
-                        <img src="static/img/services/services-3.jpg" alt="">
+                        <?php $img = '';  //$app->getValuePlus("img_name", "pt_categories", "category", "Industrial Interior", "AND status=1"); ?>
+                        <img src="<?=$img!=''?'assets/files/'.$img:'static/img/services/services-3.jpg'?>" alt="">
                     </div>
                     <div class="services__content text-center">
                         <div class="services__icon">
@@ -65,7 +73,7 @@
                         <h3 class="services__title">
                             <a href="services-details.html">Industrial Interior</a>
                         </h3>
-                        <p>Sed ut perspiciatis unde omnis iste natus error sit volupt ateaccu</p>
+                        <p><?=$app->industrial?></p>
                         <!-- <a href="services-details.html" class="link-btn-2">
                               read more
                               <i class="far fa-arrow-right"></i>
@@ -73,6 +81,7 @@
                            </a> -->
                     </div>
                 </div>
+                </a>
             </div>
         </div>
     </div>
@@ -106,7 +115,7 @@
                         </div>
                         <div class="skill__progress-content">
                             <h3>Resindential Interior</h3>
-                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium</p>
+                            <p><?=$app->residential?></p>
                         </div>
                     </div>
                     <div class="skill__progress-item d-sm-flex align-items-center mb-30">
@@ -117,7 +126,7 @@
                         </div>
                         <div class="skill__progress-content">
                             <h3>Commercial Interior</h3>
-                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium</p>
+                            <p><?=$app->commercial?></p>
                         </div>
                     </div>
                     <div class="skill__progress-item d-sm-flex align-items-center mb-30">
@@ -128,7 +137,7 @@
                         </div>
                         <div class="skill__progress-content">
                             <h3>Industrial Interior</h3>
-                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium</p>
+                            <p><?=$app->industrial?></p>
                         </div>
                     </div>
                 </div>

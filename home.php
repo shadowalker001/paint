@@ -73,72 +73,124 @@ $app = new App();
 
    <main>
 
-      <!-- slider area start -->
-      <section class="slider__area" id="home">
-         <div class="slider__active swiper-container">
-            <div class="swiper-wrapper">
-               <div class="single-slider swiper-slide slider__height slider__overlay d-flex align-items-center" data-background="static/img/slider/slider-1.jpg">
-                  <div class="container">
-                     <div class="row">
-                        <div class="col-xxl-12">
-                           <div class="slider__content text-center">
-                              <span data-animation="fadeInUp" data-delay=".2s">10 Years Of Experience</span>
-                              <h2 class="slider__title" data-animation="fadeInUp" data-delay=".4s"><?= $app->app_title ?></h2>
+      <?php
+      $querySQL = "SELECT * FROM pt_sliders WHERE status=1 ORDER BY id DESC";
+      $db_handle = $dbh->prepare($querySQL);
+      $db_handle->execute();
+      $counter = 1;
+      if ($db_handle->rowCount() > 0) {
+      ?>
+         <!-- slider area start -->
+         <section class="slider__area" id="home">
+            <div class="slider__active swiper-container">
+               <div class="swiper-wrapper">
+                  <?php
+                  while ($paramGetFields = $db_handle->fetch(PDO::FETCH_OBJ)) {
+                     //   $id = $paramGetFields->id;
+                     //   $btnId = AesCtr::encrypt($id, 'aes256', 256);
+                  ?>
+                     <div class="single-slider swiper-slide slider__height slider__overlay d-flex align-items-center" data-background="assets/files/<?php echo $paramGetFields->img_name; ?>">
+                        <div class="container">
+                           <div class="row">
+                              <div class="col-xxl-12">
+                                 <div class="slider__content text-center">
+                                    <span data-animation="fadeInUp" data-delay=".2s"><?php echo $paramGetFields->subtitle; ?></span>
+                                    <h2 class="slider__title" data-animation="fadeInUp" data-delay=".4s"><?php echo $paramGetFields->title; ?></h2>
 
-                              <div class="slider__btn" data-animation="fadeInUp" data-delay=".6s">
-                                 <a href="#contact" class="r-btn r-btn-green mr-10">get started <i class="far fa-arrow-right"></i></a>
-                                 <a href="store" class="r-btn">our services<i class="far fa-arrow-right"></i></a>
+                                    <div class="slider__btn" data-animation="fadeInUp" data-delay=".6s">
+                                       <a href="#contact" class="r-btn r-btn-green mr-10">get started <i class="far fa-arrow-right"></i></a>
+                                       <a href="store" class="r-btn">our services<i class="far fa-arrow-right"></i></a>
+                                    </div>
+                                 </div>
                               </div>
                            </div>
                         </div>
                      </div>
-                  </div>
+                  <?php
+                     $counter++;
+                  }
+                  ?>
+
                </div>
-               <div class="single-slider swiper-slide slider__height slider__overlay d-flex align-items-center" data-background="static/img/slider/slider-2.jpg">
-                  <div class="container">
-                     <div class="row">
-                        <div class="col-xxl-12">
-                           <div class="slider__content text-center">
-                              <span data-animation="fadeInUp" data-delay=".2s">10 Years Of Experience</span>
-                              <h2 class="slider__title" data-animation="fadeInUp" data-delay=".4s"><?= $app->app_title ?></h2>
-
-                              <div class="slider__btn" data-animation="fadeInUp" data-delay=".6s">
-                                 <a href="#contact" class="r-btn r-btn-green mr-10">get started <i class="far fa-arrow-right"></i></a>
-                                 <a href="store" class="r-btn">our services<i class="far fa-arrow-right"></i></a>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
+               <div class="slider__nav">
+                  <div class="swiper-button-prev swiper-slider-nav">
+                     <i class="fal fa-angle-left"></i>
                   </div>
-               </div>
-               <div class="single-slider swiper-slide slider__height slider__overlay d-flex align-items-center" data-background="static/img/slider/slider-3.jpg">
-                  <div class="container">
-                     <div class="row">
-                        <div class="col-xxl-12">
-                           <div class="slider__content text-center">
-                              <span data-animation="fadeInUp" data-delay=".2s">10 Years Of Experience</span>
-                              <h2 class="slider__title" data-animation="fadeInUp" data-delay=".4s"><?= $app->app_title ?></h2>
-
-                              <div class="slider__btn" data-animation="fadeInUp" data-delay=".6s">
-                                 <a href="#contact" class="r-btn r-btn-green mr-10">get started <i class="far fa-arrow-right"></i></a>
-                                 <a href="store" class="r-btn">our services<i class="far fa-arrow-right"></i></a>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
+                  <div class="swiper-button-next swiper-slider-nav">
+                     <i class="far fa-angle-right"></i>
                   </div>
                </div>
             </div>
-            <div class="slider__nav">
-               <div class="swiper-button-prev swiper-slider-nav">
-                  <i class="fal fa-angle-left"></i>
+         </section>
+      <?php } else { ?>
+         <!-- slider area start -->
+         <section class="slider__area" id="home">
+            <div class="slider__active swiper-container">
+               <div class="swiper-wrapper">
+                  <div class="single-slider swiper-slide slider__height slider__overlay d-flex align-items-center" data-background="static/img/slider/slider-1.jpg">
+                     <div class="container">
+                        <div class="row">
+                           <div class="col-xxl-12">
+                              <div class="slider__content text-center">
+                                 <span data-animation="fadeInUp" data-delay=".2s">10 Years Of Experience</span>
+                                 <h2 class="slider__title" data-animation="fadeInUp" data-delay=".4s"><?= $app->app_title ?></h2>
+
+                                 <div class="slider__btn" data-animation="fadeInUp" data-delay=".6s">
+                                    <a href="#contact" class="r-btn r-btn-green mr-10">get started <i class="far fa-arrow-right"></i></a>
+                                    <a href="store" class="r-btn">our services<i class="far fa-arrow-right"></i></a>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="single-slider swiper-slide slider__height slider__overlay d-flex align-items-center" data-background="static/img/slider/slider-2.jpg">
+                     <div class="container">
+                        <div class="row">
+                           <div class="col-xxl-12">
+                              <div class="slider__content text-center">
+                                 <span data-animation="fadeInUp" data-delay=".2s">10 Years Of Experience</span>
+                                 <h2 class="slider__title" data-animation="fadeInUp" data-delay=".4s"><?= $app->app_title ?></h2>
+
+                                 <div class="slider__btn" data-animation="fadeInUp" data-delay=".6s">
+                                    <a href="#contact" class="r-btn r-btn-green mr-10">get started <i class="far fa-arrow-right"></i></a>
+                                    <a href="store" class="r-btn">our services<i class="far fa-arrow-right"></i></a>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="single-slider swiper-slide slider__height slider__overlay d-flex align-items-center" data-background="static/img/slider/slider-3.jpg">
+                     <div class="container">
+                        <div class="row">
+                           <div class="col-xxl-12">
+                              <div class="slider__content text-center">
+                                 <span data-animation="fadeInUp" data-delay=".2s">10 Years Of Experience</span>
+                                 <h2 class="slider__title" data-animation="fadeInUp" data-delay=".4s"><?= $app->app_title ?></h2>
+
+                                 <div class="slider__btn" data-animation="fadeInUp" data-delay=".6s">
+                                    <a href="#contact" class="r-btn r-btn-green mr-10">get started <i class="far fa-arrow-right"></i></a>
+                                    <a href="store" class="r-btn">our services<i class="far fa-arrow-right"></i></a>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
                </div>
-               <div class="swiper-button-next swiper-slider-nav">
-                  <i class="far fa-angle-right"></i>
+               <div class="slider__nav">
+                  <div class="swiper-button-prev swiper-slider-nav">
+                     <i class="fal fa-angle-left"></i>
+                  </div>
+                  <div class="swiper-button-next swiper-slider-nav">
+                     <i class="far fa-angle-right"></i>
+                  </div>
                </div>
             </div>
-         </div>
-      </section>
+         </section>
+      <?php } ?>
       <!-- slider area end -->
       <!-- about area start -->
       <?php require("inc.files/about.php"); ?>
@@ -186,10 +238,10 @@ $app = new App();
    <script src="static/js/wow.min.js"></script>
    <script src="static/js/isotope.pkgd.min.js"></script>
    <script src="static/js/imagesloaded.pkgd.min.js"></script>
-    <script src="vendors/sweetalert2/sweetalert2.all.min.js"></script>
-    <script src="vendors/toaster/toastr.min.js"></script>
+   <script src="vendors/sweetalert2/sweetalert2.all.min.js"></script>
+   <script src="vendors/toaster/toastr.min.js"></script>
    <script src="static/js/main.js"></script>
-    <script src="static/js/functions.js?<?=time()?>"></script>
+   <script src="static/js/functions.js?<?= time() ?>"></script>
    <script>
       $(document).ready(function() {
          $('#home').appear(function() {
