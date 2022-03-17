@@ -829,9 +829,11 @@ if (isset($_GET['mode'])) {
             }
         } else {
             $_SESSION["cart"] = ['btnId' => [$btnId], 'btnPrice' => [$btnPrice]];
+            $cart = $_SESSION["cart"];
             print '<script type="text/javascript"> 
                 $(\'.cartItems\').html(\'1\');
                 $(\'.cartSumPrice\').html(\'₦' . number_format($btnPrice) . '\');
+                $("#cartIds").val("' . str_replace('"', "'", json_encode($cart['btnId'])) . '");
             </script>';
             print "<script type='text/javascript'>toastr.success(\"Added to cart!\")</script>";
         }
@@ -1025,5 +1027,24 @@ if (isset($_GET['mode'])) {
         //     $newUrl = $urlArr[0] . '?' . $new_query_string;
         //     return $newUrl;
         // };
+    } else if ($mode == "doneModal"){
+        $arr = array("$name" => "$value");
+        if(!isset($_SESSION["last_post"])){
+            $_SESSION["last_post"] = array();
+        }
+        $_SESSION["last_post"] = array_merge($_SESSION["last_post"], $arr);
+        // print_r($_SESSION["last_post"]);
+        echo '<script> 
+        cartIds = $("#cartIds").val();
+        if(cartIds.includes("'.$btnId.'")){
+            toastr.success("Already in cart!")
+        }
+        if(!cartIds.includes("'.$btnId.'")){
+            $.post("'.$app->server_root_dir('inc.files/process_script?mode=addToCart').'", { btnId: "'.$btnId.'", btnPrice: "'.$btnPrice.'" }, function (data) {
+                $("#formSpan").html(data);
+            });
+        }
+        </script>
+        ';
     }
 }

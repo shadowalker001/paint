@@ -7,7 +7,11 @@ $app->safesession();
 extract($_POST);
 
 if (isset($_GET['checkoutForm'])) {
-    $_SESSION['last_post'] = $_POST;
+    // $_SESSION['last_post'] = $_POST;
+    if (!isset($_SESSION["last_post"])) {
+        $_SESSION["last_post"] = array();
+    }
+    $_SESSION["last_post"] = array_merge($_SESSION["last_post"], $_POST);
     // print_r($_POST);die;
     $amount = $_POST['totalCartSum'];
     $name = $_POST['name'];
@@ -107,7 +111,7 @@ if (isset($_GET['checkoutForm'])) {
                     for ($i = 0; $i < count($cart['btnId']); $i++) {
                         # code...
                         $id = $cart['btnId'][$i];
-                        if(isset($post["colorId$id"])){
+                        if (isset($post["colorId$id"])) {
                             $colorId = $post["colorId$id"];
                             $old_color = $app->getValue("color", "pt_products", "id", $id);
                             if ($old_color != "") {
@@ -123,7 +127,7 @@ if (isset($_GET['checkoutForm'])) {
                             $success++;
                         }
                     }
-                    if($success==count($cart['btnId'])){
+                    if ($success == count($cart['btnId'])) {
                         $_SESSION['PAY_SUCCESS'] = true;
                         unset($_SESSION["cart"]);
                         unset($_SESSION["last_post"]);

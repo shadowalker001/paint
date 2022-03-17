@@ -26,6 +26,119 @@ $app->safesession();
     <link href="https://fonts.googleapis.com/css2?family=Open%20Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../vendors/sweetalert2/sweetalert2.min.css">
     <link rel="stylesheet" href="../vendors/toaster/toastr.min.css">
+    <style>
+        * {
+            box-sizing: border-box
+        }
+
+        /* Set a style for all buttons */
+        button {
+            background-color: #04AA6D;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            opacity: 0.9;
+        }
+
+        button:hover {
+            opacity: 1;
+        }
+
+        /* Float cancel and delete buttons and add an equal width */
+        .cancelbtn,
+        .submitbtn {
+            float: left;
+            width: 50%;
+        }
+
+        /* Add a color to the cancel button */
+        .cancelbtn {
+            background-color: #ccc;
+            color: black;
+        }
+
+        /* Add a color to the delete button */
+        .submitbtn {
+            background-color: #fc8459;
+        }
+
+        /* Add padding and center-align text to the container */
+        .container {
+            padding: 16px;
+            text-align: center;
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: #474e5d;
+            padding-top: 50px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 80%;
+            /* Could be more or less, depending on screen size */
+        }
+
+        /* Style the horizontal ruler */
+        hr {
+            border: 1px solid #f1f1f1;
+            margin-bottom: 25px;
+        }
+
+        /* The Modal Close Button (x) */
+        .close {
+            position: absolute;
+            right: 35px;
+            top: 15px;
+            font-size: 40px;
+            font-weight: bold;
+            color: #f1f1f1;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #f44336;
+            cursor: pointer;
+        }
+
+        /* Clear floats */
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        /* Change styles for cancel button and delete button on extra small screens */
+        @media screen and (max-width: 300px) {
+
+            .cancelbtn,
+            .submitbtn {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body class="template-collection has-smround-btns has-loader-bg equal-height has-sm-container">
@@ -116,8 +229,9 @@ $app->safesession();
                                                             <div class="prd-action">
                                                                 <form action="#">
                                                                     <!-- Pick Color<input type="color" name="" id=""> -->
-                                                                    <button btnId="<?= $fetch_obj->id ?>" btnPrice="<?= $fetch_obj->price ?>" class="btn js-prd-addtocart addToCart" data-product='{"name": "<?= $fetch_obj->title ?>", "path":"../assets/files/<?= $fetch_obj->img_name ?>", "url":"cart", "aspect_ratio":0.778}'>Add
-                                                                        To Cart</button>
+                                                                    <!-- <button btnId="<?= $fetch_obj->id ?>" btnPrice="<?= $fetch_obj->price ?>" class="btn js-prd-addtocart addToCart" data-product='{"name": "<?= $fetch_obj->title ?>", "path":"../assets/files/<?= $fetch_obj->img_name ?>", "url":"cart", "aspect_ratio":0.778}'>Add
+                                                                        To Cart</button> -->
+                                                                    <button btnId="<?= $fetch_obj->id ?>" btnPrice="<?= $fetch_obj->price ?>" hasColor="<?= $fetch_obj->color!=''?'true':'false' ?>" type="button" class="btn btn-info btn-lg checkStatus" data-toggle="modal" data-target="#myModalss<?= $fetch_obj->id ?>">Add To Cart</button>
                                                                 </form>
                                                             </div>
                                                         </div>
@@ -128,8 +242,8 @@ $app->safesession();
                                                             <div class="prd-action">
                                                                 <div class="prd-action-left">
                                                                     <form action="#">
-                                                                        <button btnId="<?= $fetch_obj->id ?>" btnPrice="<?= $fetch_obj->price ?>" class="btn js-prd-addtocart addToCart" data-product='{"name": "<?= $fetch_obj->title ?>", "path":"../assets/files/<?= $fetch_obj->img_name ?>", "url":"cart", "aspect_ratio":0.778}'>Add
-                                                                            To Cart</button>
+                                                                        <!-- <button btnId="<?= $fetch_obj->id ?>" btnPrice="<?= $fetch_obj->price ?>" class="btn js-prd-addtocart addToCart" data-product='{"name": "<?= $fetch_obj->title ?>", "path":"../assets/files/<?= $fetch_obj->img_name ?>", "url":"cart", "aspect_ratio":0.778}'>Add -->
+                                                                        To Cart</button>
                                                                     </form>
                                                                 </div>
                                                             </div>
@@ -206,45 +320,6 @@ $app->safesession();
         </div>
     </footer>
     <div class="footer-sticky">
-        <!-- <div class="sticky-addcart js-stickyAddToCart closed">
-            <div class="container">
-                <div class="row">
-                    <div class="col-auto sticky-addcart_image">
-                        <a href="product.html">
-                            <img src="images/skins/fashion/products/product-01-1.webp.html" alt="" />
-                        </a>
-                    </div>
-                    <div class="col col-sm-5 col-lg-4 col-xl-5 sticky-addcart_info">
-                        <h1 class="sticky-addcart_title">Leather Pegged Pants</h1>
-                        <div class="sticky-addcart_price">
-                            <span class="sticky-addcart_price--actual">₦180.00</span>
-                            <span class="sticky-addcart_price--old">₦210.00</span>
-                        </div>
-                    </div>
-                    <div class="col-auto sticky-addcart_options  prd-block prd-block_info--style1">
-                        <div class="select-wrapper">
-                            <select class="form-control form-control--sm">
-                                <option value="">--Please choose an option--</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-auto sticky-addcart_actions">
-                        <div class="prd-block_qty">
-                            <span class="option-label">Quantity:</span>
-                            <div class="qty qty-changer">
-                                <button class="decrease"></button>
-                                <input type="number" class="qty-input" value="1" data-min="1" data-max="1000">
-                                <button class="increase"></button>
-                            </div>
-                        </div>
-                        <div class="btn-wrap">
-                            <button class="btn js-prd-addtocart" data-fancybox data-src="#modalCheckOut">Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
         <div class="popup-addedtocart js-popupAddToCart closed" data-close="50000">
             <div class="container">
                 <div class="row">
@@ -273,47 +348,6 @@ $app->safesession();
                 </div>
             </div>
         </div>
-        <!-- <div class="sticky-addcart popup-selectoptions js-popupSelectOptions closed" data-close="500000">
-            <div class="container">
-                <div class="row">
-                    <div class="popup-selectoptions-close js-popupSelectOptions-close"><i class="icon-close"></i></div>
-                    <div class="col-auto sticky-addcart_image sticky-addcart_image--zoom">
-                        <a href="category-listview.html#" data-caption="">
-                            <span class="image-container"><img src="category-listview.html#" alt="" /></span>
-                        </a>
-                    </div>
-                    <div class="col col-sm-5 col-lg-4 col-xl-5 sticky-addcart_info">
-                        <h1 class="sticky-addcart_title"><a href="category-listview.html#">&nbsp;</a></h1>
-                        <div class="sticky-addcart_price">
-                            <span class="sticky-addcart_price--actual"></span>
-                            <span class="sticky-addcart_price--old"></span>
-                        </div>
-                        <div class="sticky-addcart_error_message">Error Message</div>
-                    </div>
-                    <div class="col-auto sticky-addcart_options prd-block prd-block_info--style1">
-                        <div class="select-wrapper">
-                            <select class="form-control form-control--sm sticky-addcart_options_select">
-                                <option value="none">Select Option please..</option>
-                            </select>
-                            <div class="invalid-feedback">Can't be blank</div>
-                        </div>
-                    </div>
-                    <div class="col-auto sticky-addcart_actions">
-                        <div class="prd-block_qty">
-                            <span class="option-label">Quantity:</span>
-                            <div class="qty qty-changer">
-                                <button class="decrease"></button>
-                                <input type="number" class="qty-input" value="2" data-min="1" data-max="10000">
-                                <button class="increase"></button>
-                            </div>
-                        </div>
-                        <div class="btn-wrap">
-                            <button class="btn js-prd-addtocart">Add to cart</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
         <a class="back-to-top js-back-to-top compensate-for-scrollbar" href="#" title="Scroll To Top">
             <i class="icon icon-angle-up"></i>
         </a>
@@ -323,32 +357,65 @@ $app->safesession();
             </div>
         </div>
     </div>
-    <!-- <div class="footer-sticky">
-        <div class="payment-notification-wrap js-pn" data-visible-time="3000" data-hidden-time="3000" data-delay="500" data-from="Aberdeen,Bakersfield,Birmingham,Cambridge,Youngstown" data-products='[{"productname":"Leather Pegged Pants", "productlink":"product.html","productimage":"images/skins/fashion/products/product-01-1.webp"},{"productname":"Black Fabric Backpack", "productlink":"product.html","productimage":"images/skins/fashion/products/product-28-1.webp"},{"productname":"Combined Chunky Sneakers", "productlink":"product.html","productimage":"images/skins/fashion/products/product-23-1.webp"}]'>
-            <div class="payment-notification payment-notification--squared">
-                <div class="payment-notification-inside">
-                    <div class="payment-notification-container">
-                        <a href="category-listview.html#" class="payment-notification-image js-pn-link">
-                            <img src="https://big-skins.com/frontend/foxic-html-demo/images/products/product-01.webp" class="js-pn-image" alt="">
-                        </a>
-                        <div class="payment-notification-content-wrapper">
-                            <div class="payment-notification-content">
-                                <div class="payment-notification-text">Someone purchased</div>
-                                <a href="product.html" class="payment-notification-name js-pn-name js-pn-link">Applewatch</a>
-                                <div class="payment-notification-bottom">
-                                    <div class="payment-notification-when"><span class="js-pn-time">32</span> min ago
-                                    </div>
-                                    <div class="payment-notification-from">from <span class="js-pn-from">Riverside</span></div>
-                                </div>
+
+    <!-- Modal -->
+    <?php
+    $db_handle = $dbh->prepare("SELECT * FROM pt_products WHERE status=1 AND color != '' ORDER BY id DESC");
+    $db_handle->execute();
+    $sn = 1;
+    if ($db_handle->rowCount() > 0) {
+    ?>
+        <?php
+        while ($fetch_obj = $db_handle->fetch(PDO::FETCH_OBJ)) {
+            $btnId = AesCtr::encrypt($fetch_obj->id, 'aes256', 256);
+        ?>
+            <div id="myModal<?= $fetch_obj->id ?>" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-lg">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="content-title m-0 text-center" style="width: 100%;">
+                                <div class="content-title-inner">
+                                    <div class="container">
+                                        <h1>Choose Color</h1>
+                                    </div><!-- /.container -->
+                                </div><!-- /.content-title-inner -->
                             </div>
                         </div>
+                        <div class="modal-body">
+                            <form method="post" action="" role="form" id="contactForm">
+                                <span id="formSpan" class="formSpan text-danger"></span>
+                                <div class="row">
+                                    <?php
+                                    $color = $fetch_obj->color;
+                                    if ($color != "") {
+                                        $color = json_decode($color);
+                                        echo '<select class="form-control colorId" name="colorId' . $fetch_obj->id . '" id="colorId' . $fetch_obj->id . '" class="form-control" required style="margin-left:5%;margin-right:5%; padding-y:5px; background-color:' . $color[0]->color . '">';
+                                        for ($i = 0; $i < count($color); $i++) {
+                                            # code...
+                                            echo '<option class="form-control" color="' . $color[$i]->color . '" style="background-color:' . $color[$i]->color . '" value="' . ($i + 1) . '">' . $color[$i]->name . '</option>';
+                                        }
+                                        echo '</select>';
+                                    } else {
+                                        echo '<span><i>None</i></span>';
+                                    }
+                                    ?>
+                                </div>
+                                <div class="clearfix">
+                                    <button type="button" class="cancelbtn" data-dismiss="modal">Cancel</button>
+                                    <!-- <button style="display: none;" btnId="<?= $fetch_obj->id ?>" btnPrice="<?= $fetch_obj->price ?>" class="btn js-prd-addtocart addToCart" data-product='{"name": "<?= $fetch_obj->title ?>", "path":"../assets/files/<?= $fetch_obj->img_name ?>", "url":"cart", "aspect_ratio":0.778}'>Add
+                                        To Cart</button> -->
+                                    <button type="button" class="submitbtn js-prd-addtocart" data-product='{"name": "<?= $fetch_obj->title ?>", "path":"../assets/files/<?= $fetch_obj->img_name ?>", "url":"cart", "aspect_ratio":0.778}' type="submit" id="smtBtn" onclick="doneModal('<?= $fetch_obj->id ?>', '<?= $fetch_obj->id ?>', '<?= $fetch_obj->price ?>');">Done</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <div class="payment-notification-close"><i class="icon-close-bold"></i></div>
-                    <div class="payment-notification-qw prd-hide-mobile js-prd-quickview" data-src="ajax/ajax-quickview.html"><i class="icon-eye"></i></div>
+
                 </div>
             </div>
-        </div>
-    </div> -->
+    <?php }
+    } ?>
     <script src="js/vendor-special/lazysizes.min.js"></script>
     <script src="js/vendor-special/ls.bgset.min.js"></script>
     <script src="js/vendor-special/ls.aspectratio.min.js"></script>
@@ -359,15 +426,65 @@ $app->safesession();
     <script src="../vendors/toaster/toastr.min.js"></script>
     <script src="js/app-html.js"></script>
     <script src="../static/js/functions.js?<?= time() ?>"></script>
+    <script>
+        // Get the modal
+        // var modal = document.getElementById('myModal');
+
+        // // When the user clicks anywhere outside of the modal, close it
+        // window.onclick = function(event) {
+        //     if (event.target == modal) {
+        //         modal.style.display = "none";
+        //     }
+        // }
+
+        $('.checkStatus').click(function name(params) {
+            cartIds = $("#cartIds").val();
+            btnId = $(this).attr('btnId');
+            hasColor = $(this).attr('hasColor');
+            btnPrice = $(this).attr('btnPrice');
+            if (cartIds.includes(btnId)) {
+                toastr.success("Already in cart!");
+                return;
+            } else {
+                if (hasColor=='true') {
+                    $('#myModal' + btnId).modal('show');
+                } else {
+                    if (!cartIds.includes(btnId)) {
+                        $.post(path + 'inc.files/process_script?mode=addToCart', {
+                            btnId: btnId,
+                            btnPrice: btnPrice
+                        }, function(data) {
+                            $('#formSpan').html(data);
+                        });
+                    }
+                }
+            }
+            return false;
+        });
+
+        function doneModal(val, btnId, btnPrice) {
+            $('#myModal' + val).modal('toggle');
+            var value = $("#colorId" + val).val();
+            // cartIds = $("#cartIds").val();
+            $.post(path + 'inc.files/process_script?mode=doneModal', {
+                name: 'colorId' + val,
+                value: value,
+                btnId: btnId,
+                btnPrice: btnPrice,
+            }, function(data) {
+                $('#formSpan').html(data);
+            });
+        }
+    </script>
     <?php
-        if(isset($_SESSION['PAY_ERROR'])){
-            $app->sweetAlert('warning', 'We can not process your payment!');
-            unset($_SESSION['PAY_ERROR']);
-        }
-        if(isset($_SESSION['PAY_SUCCESS'])){
-            $app->sweetAlert('success', 'Transaction successful, your product is ready for shipment!');
-            unset($_SESSION['PAY_SUCCESS']);
-        }
+    if (isset($_SESSION['PAY_ERROR'])) {
+        $app->sweetAlert('warning', 'We can not process your payment!');
+        unset($_SESSION['PAY_ERROR']);
+    }
+    if (isset($_SESSION['PAY_SUCCESS'])) {
+        $app->sweetAlert('success', 'Transaction successful, your product is ready for shipment!');
+        unset($_SESSION['PAY_SUCCESS']);
+    }
     ?>
 </body>
 

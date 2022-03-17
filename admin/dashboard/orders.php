@@ -131,8 +131,10 @@ if (!isset($_SESSION['tappAdminId'])) {
                                                                 Description: <?php echo $app->getValue("description","pt_products", "id", $paramGetFields->prod_id); ?>
                                                                 <?php
                                                                 if($paramGetFields->color!=""){
-                                                                    $clname = json_decode($paramGetFields->color)[0]->name;
-                                                                    $clcolor = json_decode($paramGetFields->color)[0]->color;
+                                                                    $colors = json_decode($paramGetFields->color);
+                                                                    // print_r(count($colors));
+                                                                    $clname = json_decode($paramGetFields->color)->name;
+                                                                    $clcolor = json_decode($paramGetFields->color)->color;
                                                                     echo '<br>Color: '.$clname.' -> <input type="color" name="" id="" value="'.$clcolor.'" disabled>';
                                                                 }
                                                                 ?>

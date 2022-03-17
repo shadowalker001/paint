@@ -73,7 +73,7 @@ $app->safesession();
                                         <div class="cart-table-prd">
                                             <div class="cart-table-prd-image">
                                                 <a href="#" class="prd-img">
-                                                    <img src="images/hero-1.png" alt="" srcset="">
+                                                    <img src="../assets/files/<?= $fetch_obj->img_name ?>" alt="" srcset="">
                                                 </a>
                                             </div>
                                             <div class="cart-table-prd-content-wrap">
@@ -92,15 +92,35 @@ $app->safesession();
                                                         <button type="button" class="increase" btnId="<?= $fetch_obj->id ?>" price="<?= $fetch_obj->price ?>"></button>
                                                     </div>
                                                     <?php
+                                                    // $color = $fetch_obj->color;
+                                                    // if ($color != "") {
+                                                    //     $color = json_decode($color);
+                                                    //     echo '<select class="colorId" name="colorId' . $fetch_obj->id . '" id="colorId' . $fetch_obj->id . '" class="form-control" required style="height: 20px; width:auto; padding-y:5px; background-color:' . $color[0]->color . '">';
+                                                    //     for ($i = 0; $i < count($color); $i++) {
+                                                    //         # code...
+                                                    //         echo '<option color="' . $color[$i]->color . '" style="background-color:' . $color[$i]->color . '" value="' . ($i + 1) . '">' . $color[$i]->name . '</option>';
+                                                    //     }
+                                                    //     echo '</select>';
+                                                    // }else{
+                                                    //     echo '<span><i>None</i></span>';
+                                                    // }
                                                     $color = $fetch_obj->color;
-                                                    if ($color != "") {
-                                                        $color = json_decode($color);
-                                                        echo '<select class="colorId" name="colorId' . $fetch_obj->id . '" id="colorId' . $fetch_obj->id . '" class="form-control" required style="height: 20px; width:auto; padding-y:5px; background-color:' . $color[0]->color . '">';
-                                                        for ($i = 0; $i < count($color); $i++) {
-                                                            # code...
-                                                            echo '<option color="' . $color[$i]->color . '" style="background-color:' . $color[$i]->color . '" value="' . ($i + 1) . '">' . $color[$i]->name . '</option>';
+                                                    if(isset($_SESSION["last_post"]['colorId'.$fetch_obj->id])){
+                                                        $pt = $_SESSION["last_post"]['colorId'.$fetch_obj->id];
+                                                        if ($color != "") {
+                                                            $color = json_decode($color);
+                                                            echo '<input type="color" name="" id="" value="'.$color[$pt-1]->color.'" disabled>';
+                                                            // echo '<button type="button" style="background-color: ' . $color[$pt-1]->color . '; ">' . $color[$pt-1]->name . '</button>';
+                                                            // echo '<select class="colorId" name="colorId' . $fetch_obj->id . '" id="colorId' . $fetch_obj->id . '" class="form-control" required style="height: 20px; width:auto; padding-y:5px; background-color:' . $color[$pt-1]->color . '">';
+                                                            // echo '<option color="' . $color[$pt]->color . '" style="background-color:' . $color[$pt]->color . '">' . $color[$pt-1]->name . '</option>';
+                                                            // // for ($i = 0; $i < count($color); $i++) {
+                                                            // //     # code...
+                                                            // //     echo '<option color="' . $color[$i]->color . '" style="background-color:' . $color[$i]->color . '" value="' . ($i + 1) . '">' . $color[$i]->name . '</option>';
+                                                            // // }
+                                                            // echo '</select>';
+                                                        }else{
+                                                            echo '<span><i>None</i></span>';
                                                         }
-                                                        echo '</select>';
                                                     }else{
                                                         echo '<span><i>None</i></span>';
                                                     }
