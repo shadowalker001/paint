@@ -161,7 +161,7 @@ if (!isset($_SESSION['tappAdminId'])) {
                                         </div>
                                     </div>
                                 </div> <!-- end col-->
-                                <div class="col-sm-8 col-sm-8 offset-2">
+                                <div class="col-sm-8 col-sm-8 offset-2" id="addColor">
                                     <div class="card card-default mt-5">
                                         <div class="card-header">
                                             <h4 class="card-title">Add Product Color(s)</h4>
@@ -191,6 +191,9 @@ if (!isset($_SESSION['tappAdminId'])) {
                                 <style>
                                     option:hover {
                                         background-color: transparent !important;
+                                    }
+                                    html {
+                                        scroll-behavior: smooth;
                                     }
                                 </style>
                                 <div class="col-sm-8 col-sm-8 offset-2">

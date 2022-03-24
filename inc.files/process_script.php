@@ -520,10 +520,12 @@ if (isset($_GET['mode'])) {
                     try {
                         $db_handle = $dbh->prepare("INSERT INTO pt_products SET title=:title, description=:description, price=:price, rating=:rating, img_name=:img_name, date=NOW()");
                         if ($db_handle->execute(array(':title' => $title, ':description' => $desc, ':price' => $price, ':rating' => $rating, ':img_name' => $final_name))) {
+                            $lastInsertId = $dbh->lastInsertId();
+                            $btnId = AesCtr::encrypt($lastInsertId, 'aes256', 256);
                             $app->sweetAlert('success', 'Product added successfully!');
                             $app->buttonController('#smtBtn', 'enable');
                             print '<script type="text/javascript">$(\'#addproductForm\').trigger("reset"); $(\'#smtBtn\').html(\'Add Product <i class="fa sign-in-alt"></i>\');</script>';
-                            // print "<script>$('.processor').css('display', 'none');</script>";
+                            print "<script>setTimeout(() => { self.location = '".$app->server_root_dir("admin/dashboard/edit_product?btnId=".$btnId)."#addColor'; }, 1000); </script>";
                         }
                     } catch (PDOException $error) {
                         $app->buttonController('#smtBtn', 'enable');

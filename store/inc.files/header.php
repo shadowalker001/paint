@@ -13,7 +13,7 @@
                         </div>
                         <div class="hdr-nav hide-mobile nav-holder justify-content-center px-4">
                             <ul class="mmenu mmenu-js">
-                                <li class="mmenu-item--simple-"><a href="category-listview.html#" class="active">Store</a>
+                                <li class="mmenu-item--simple-"><a href="#" class="active">Store</a>
 
                                 </li>
 
@@ -23,7 +23,9 @@
                             <div class="hdr-inline-link">
                                 <div class="search_container_desktop">
                                     <div class="dropdn dropdn_search dropdn_fullwidth">
+                                        <?php $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; if($actual_link==$app->server_root_dir('store/home')||$actual_link==$app->server_root_dir('store/')){ ?>
                                         <a href="#" class="dropdn-link  js-dropdn-link only-icon"><i class="icon-search"></i><span class="dropdn-link-txt">Search</span></a>
+                                        <?php } ?>
                                         <div class="dropdn-content">
                                             <div class="container">
                                                 <form method="post" id="searchForm" class="search search-off-popular">

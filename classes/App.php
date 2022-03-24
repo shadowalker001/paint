@@ -9,12 +9,12 @@ class App
     public $address = "20 Main Street, Enugu Nigeria";
     public $mail_no_reply = "no-reply@paint.com";
     public $mail_host = "smtp.gmail.com";
-    public $mail_uname = "companyemail@gmail.com";
+    public $mail_uname = "augustus.akubue.237434@unn.edu.ng";
     public $mapLoc = "https://www.google.com/maps/place/Enugu/@6.513095,7.382181,9z/data=!4m2!3m1!1s0x105b661086cf0979:0x27595621a4034717";
     public $mapApi = "https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d29176.030811137334!2d90.3883827!3d23.924917699999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sbd!4v1605272373598!5m2!1sen!2sbd";
     public $mail_pass = "IamblesseD";
-    public $mail_secure = 'tls'; //ssl
-    public $mail_port = 587;  //465
+    public $mail_secure = 'ssl'; //ssl
+    public $mail_port = 465;  //465
     public $mail_response = "info@paint.com";
     #JWT setups
     public $issuerServerLink = 'www.paint.com';

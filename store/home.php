@@ -482,7 +482,7 @@ $app->safesession();
         unset($_SESSION['PAY_ERROR']);
     }
     if (isset($_SESSION['PAY_SUCCESS'])) {
-        $app->sweetAlert('success', 'Transaction successful, your product is ready for shipment!');
+        $app->sweetAlert('success', 'Transaction successful, your product is ready for shipment and an email has been sent to you with your order details!');
         unset($_SESSION['PAY_SUCCESS']);
     }
     ?>

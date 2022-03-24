@@ -402,7 +402,7 @@ $(document).ready(function () {
     /* admin update color function */
     $('#searchForm').submit(function (e) {
         finder = $("#searchProducts").val();
-        if(window.location.href==path + 'store/home'){
+        if(window.location.href==path + 'store/home' || window.location.href==path + 'store/'){
             jQuery("#dataLoader").load(path + "store/inc.files/loadFilter", {finder:finder}, function (response, status) {
                 if (status === 'error') {
                     console.log("Failed to load");
